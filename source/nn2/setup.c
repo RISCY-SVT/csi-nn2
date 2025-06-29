@@ -490,6 +490,17 @@ int csinn_session_setup(struct csinn_session *sess)
  * @addtogroup SESSION
  * @{
  */
+/**
+ * @brief Run a CSINN session by invoking its registered runtime callback.
+ *
+ * This function traces the start and end of the session execution and,
+ * if the profiler level is set to CSINN_PROFILER_LEVEL_TIMER, measures
+ * and prints the time interval for the runtime callback execution.
+ *
+ * @param[in,out] sess  Pointer to an initialized csinn_session object.
+ * @return              CSINN_TRUE on successful execution of the session,
+ *                      CSINN_FALSE otherwise.
+ */
 int csinn_session_run(struct csinn_session *sess)
 {
     SHL_TRACE_CALL(shl_trace_duration_begin(sess->trace, __func__, SHL_TRACE_EVENT_RUNTIME, NULL));

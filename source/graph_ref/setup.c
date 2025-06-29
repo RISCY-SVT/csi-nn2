@@ -72,6 +72,16 @@ void shl_gref_session_init(struct csinn_session *sess)
     sess->base_layout = CSINN_LAYOUT_NCHW;
 }
 
+int shl_gref_get_input_number(struct csinn_session *sess)
+{
+    return sess->input_num;
+}
+
+int shl_gref_get_output_number(struct csinn_session *sess)
+{
+    return sess->output_num;
+}
+
 int shl_gref_call_layer_func(void *fn, struct shl_node *node)
 {
     /* base has same address with params */
@@ -2031,53 +2041,42 @@ struct csinn_callback *shl_cb_map_gref(int op, int dtype)
 void *shl_gref_runtime_callback(int api)
 {
     switch (api) {
-        case CSINN_SESSION_INIT:
+        case CSINN_SESSION_INIT:                    // 0
             return shl_gref_session_init;
-            break;
-        case CSINN_SESSION_DEINIT:
+        case CSINN_SESSION_DEINIT:                  // 1
             return shl_gref_session_deinit;
-            break;
-        case CSINN_SESSION_SETUP:
+        case CSINN_SESSION_SETUP:                   // 2
             return shl_gref_session_setup;
-            break;
-        case CSINN_SESSION_RUN:
+        case CSINN_SESSION_RUN:                     // 3
             return shl_gref_session_run;
-            break;
-        case CSINN_UPDATE_INPUT:
+        case CSINN_UPDATE_INPUT:                    // 4
             return shl_gref_update_input;
-            break;
-        case CSINN_UPDATE_OUTPUT:
+        case CSINN_UPDATE_OUTPUT:                   // 5
             return shl_gref_update_output;
-            break;
-        case CSINN_SET_INPUT_NUMBER:
+        case CSINN_SET_INPUT_NUMBER:                // 6
             return shl_gref_set_input_number;
-            break;
-        case CSINN_SET_OUTPUT_NUMBER:
+        case CSINN_SET_OUTPUT_NUMBER:               // 7
             return shl_gref_set_output_number;
-            break;
-        case CSINN_SET_INPUT:
+        case CSINN_GET_INPUT_NUMBER:                // 8
+            return shl_gref_get_input_number;
+        case CSINN_GET_OUTPUT_NUMBER:               // 9
+            return shl_gref_get_output_number;
+        case CSINN_SET_INPUT:                       // 10
             return shl_gref_set_input;
-            break;
-        case CSINN_SET_OUTPUT:
+        case CSINN_SET_OUTPUT:                      // 11
             return shl_gref_set_output;
-            break;
-        case CSINN_GET_INPUT:
+        case CSINN_GET_INPUT:                       // 12
             return shl_gref_get_input;
-            break;
-        case CSINN_GET_OUTPUT:
+        case CSINN_GET_OUTPUT:                      // 13
             return shl_gref_get_output;
-            break;
-        case CSINN_TENSOR_ENTRY:
+        case CSINN_TENSOR_ENTRY:                    // 14
             return shl_gref_set_tensor;
-            break;
-        case CSINN_LOAD_BG:
+        case CSINN_LOAD_BG:                         // 15
             return shl_gref_load_binary_model;
-            break;
         default:
             shl_debug_info("%s: Cannot find callback\n", __func__);
-            break;
+            return NULL;
     }
-    return NULL;
 }
 
 void shl_target_init_gref()

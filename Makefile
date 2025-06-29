@@ -1,7 +1,7 @@
 # Release or Debug or MinSizeRel
-BUILD_TYPE=Release
+BUILD_TYPE=MinSizeRel
 USE_CORE=8
-INSTALL_DIR=../install_nn2/
+INSTALL_DIR=../install_nn2
 all: nn2_ref_x86
 
 nn2_e907_elf:
@@ -27,6 +27,9 @@ nn2_c908:
 
 nn2_c920:
 	mkdir -p c920_build; cd c920_build; cmake ../ -DCONFIG_BUILD_RISCV_C920=ON -DCONFIG_SHL_BUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/c920/; make -j${USE_CORE}; make install; cd -
+
+nn2_th1520:
+	mkdir -p th1520_build; cd th1520_build; cmake ../ -DCONFIG_BUILD_RISCV_RVM=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/rvm/; make -j${USE_CORE}; make install; cd -
 
 nn2_c920v2:
 	mkdir -p c920v2_build; cd c920v2_build; cmake ../ -DCONFIG_BUILD_RISCV_C920V2=ON -DCONFIG_SHL_BUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/c920v2/; make -j${USE_CORE}; make install; cd -

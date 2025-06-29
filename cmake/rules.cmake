@@ -1,13 +1,16 @@
 if (NOT CONFIG_USE_COMPILER_PATH)
 
+set(TOOLS_PREFIX "riscv64-unknown-linux-gnu")
+# set(TOOLS_PREFIX "riscv64-unknown-linux-musl")
+
 # riscv linux compiler
 if (CONFIG_BUILD_RISCV_RVV OR CONFIG_BUILD_RISCV_C906 OR
     CONFIG_BUILD_RISCV_RVM OR CONFIG_BUILD_RISCV_C908 OR
     CONFIG_BUILD_RISCV_C920 OR CONFIG_BUILD_RISCV_C920V2 OR
     CONFIG_BUILD_RISCV_PNNA OR CONFIG_BUILD_TH1520)
-    set(CMAKE_C_COMPILER riscv64-unknown-linux-gnu-gcc)
-    set(CMAKE_CXX_COMPILER riscv64-unknown-linux-gnu-g++)
-    set(CMAKE_ASM_COMPILER riscv64-unknown-linux-gnu-gcc)
+    set(CMAKE_C_COMPILER ${TOOLS_PREFIX}-gcc)
+    set(CMAKE_CXX_COMPILER ${TOOLS_PREFIX}-g++)
+    set(CMAKE_ASM_COMPILER ${TOOLS_PREFIX}-gcc)
 endif()
 
 # riscv elf compiler

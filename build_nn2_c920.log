@@ -1,0 +1,882 @@
+mkdir -p c920_build; cd c920_build; cmake ../ -DCONFIG_BUILD_RISCV_C920=ON -DCONFIG_SHL_BUILD_STATIC=ON -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=../install_nn2/c920/; make -j8; make install; cd -
+-- The C compiler identification is GNU 10.4.0
+-- The CXX compiler identification is GNU 10.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/riscv/bin/riscv64-unknown-linux-gnu-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/riscv/bin/riscv64-unknown-linux-gnu-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/riscv/bin/riscv64-unknown-linux-gnu-gcc
+-- Print the execution time of each layer - ON
+-- Generate trace data - ON
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /data/csi-nn2/c920_build
+make[1]: Entering directory '/data/csi-nn2/c920_build'
+make[2]: Entering directory '/data/csi-nn2/c920_build'
+make[3]: Entering directory '/data/csi-nn2/c920_build'
+Scanning dependencies of target c920_lib
+make[3]: Leaving directory '/data/csi-nn2/c920_build'
+make[3]: Entering directory '/data/csi-nn2/c920_build'
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/abs.c.o
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/acos.c.o
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/acosh.c.o
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/add.c.o
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/and.c.o
+[  0%] Building C object CMakeFiles/c920_lib.dir/source/nn2/any.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/arange.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/all.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/argmin.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/asin.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/argmax.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/asinh.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/atan.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/atanh.c.o
+[  1%] Building C object CMakeFiles/c920_lib.dir/source/nn2/averagepool.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/averagepool3d.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/batch_normalization.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/batch_to_space.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/batch_to_space_nd.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/broadcast_to.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cache_conv1d.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cache_matmul.c.o
+[  2%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cast.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/ceil.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/clip.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/col2im.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/concat.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/convolution.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/convolution1d.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/convolution_relu.c.o
+[  3%] Building C object CMakeFiles/c920_lib.dir/source/nn2/convolution3d.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/convolution_relu6.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cos.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cosh.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/crop.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cumsum.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/data_convert.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/cumprod.c.o
+[  4%] Building C object CMakeFiles/c920_lib.dir/source/nn2/deconvolution.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/deconvolution3d.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/depth_to_space.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/depthwise_conv2d.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/depthwise_conv2d_relu.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/div.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/elu.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/embedding.c.o
+[  5%] Building C object CMakeFiles/c920_lib.dir/source/nn2/equal.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/erf.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/exp.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/expand_dims.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/expm1.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/floor.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/flatten.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/floor_divide.c.o
+[  6%] Building C object CMakeFiles/c920_lib.dir/source/nn2/floor_mod.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/format.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/fullyconnected.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/fsmn.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/gather.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/gather_nd.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/global_averagepool.c.o
+[  7%] Building C object CMakeFiles/c920_lib.dir/source/nn2/global_maxpool.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/greater.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/greater_equal.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/group_conv2d.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/hard_sigmoid.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/im2col.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/isnan.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/l2_normalization.c.o
+[  8%] Building C object CMakeFiles/c920_lib.dir/source/nn2/l2pool.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/layer_norm.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/leaky_relu.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/less.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/less_equal.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/llm_pos.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/log.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/log_softmax.c.o
+[  9%] Building C object CMakeFiles/c920_lib.dir/source/nn2/log1p.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/logical_and.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/logical_or.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/logical_not.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/logical_xor.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/lrn.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/matmul.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/max.c.o
+[ 10%] Building C object CMakeFiles/c920_lib.dir/source/nn2/maximum.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/maxpool.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/maxpool2d_locat.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/maxpool3d.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/mean.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/min.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/minimum.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/mod.c.o
+[ 11%] Building C object CMakeFiles/c920_lib.dir/source/nn2/mul.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/ndarray_size.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/negative.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/node.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/non_max_suppression.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/not.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/not_equal.c.o
+[ 12%] Building C object CMakeFiles/c920_lib.dir/source/nn2/one_hot.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/pad.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/or.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/power.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/prelu.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/prod.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/proposal.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/psroipooling.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_logsumexp.c.o
+[ 13%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_max.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_mean.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_min.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_prod.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reduce_sum.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/relu.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/relu1.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/relu6.c.o
+[ 14%] Building C object CMakeFiles/c920_lib.dir/source/nn2/relun.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reorg.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reshape.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/resize.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/reverse.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/rms_norm.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/roipool.c.o
+[ 15%] Building C object CMakeFiles/c920_lib.dir/source/nn2/roialign.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/rope.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/rsqrt.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/round.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/scaled_dot_product_attention.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/scatter.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/segment_max.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/segment_mean.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/segment_min.c.o
+[ 16%] Building C object CMakeFiles/c920_lib.dir/source/nn2/segment_sum.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/select.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/segment_prod.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sequence_mask.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/setup.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/shape.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/shuffle_channel.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sigmoid.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/silu.c.o
+[ 17%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sin.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sign.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sinh.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/slice.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/softmax.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/softplus.c.o
+[ 18%] Building C object CMakeFiles/c920_lib.dir/source/nn2/softrelu.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/softsign.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/space_to_batch.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/space_to_batch_nd.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/space_to_depth.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/split.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sqrt.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/square.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/squeeze.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/strided_slice.c.o
+[ 19%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sub.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/stack.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/sum.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/tan.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/tanh.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/threshold_relu.c.o
+[ 20%] Building C object CMakeFiles/c920_lib.dir/source/nn2/tile.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/topk.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/trunc.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/transpose.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/unpooling.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/utils.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/unstack.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/where.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/where_softmax.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/nn2/yuv_rgb_scale.c.o
+[ 21%] Building C object CMakeFiles/c920_lib.dir/source/utils/atat_malloc.c.o
+[ 22%] Building C object CMakeFiles/c920_lib.dir/source/nn2/xor.c.o
+[ 22%] Building C object CMakeFiles/c920_lib.dir/source/utils/debug.c.o
+[ 22%] Building CXX object CMakeFiles/c920_lib.dir/source/utils/export_json_wrapper.cpp.o
+[ 22%] Building C object CMakeFiles/c920_lib.dir/source/utils/export.c.o
+[ 22%] Building C object CMakeFiles/c920_lib.dir/source/utils/memory.c.o
+[ 22%] Building C object CMakeFiles/c920_lib.dir/source/utils/multithread.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/utils/shl_profiler.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/abs.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/acos.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/acosh.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/add.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/and.c.o
+[ 23%] Building C object CMakeFiles/c920_lib.dir/source/reference/arange.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/argmax.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/argmin.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/asin.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/asinh.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/atan.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/atanh.c.o
+[ 24%] Building C object CMakeFiles/c920_lib.dir/source/reference/averagepool.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/batch_normalization.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/averagepool3d.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/batch_to_space.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/cache_conv1d.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/broadcast_to.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/cache_matmul.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/ceil.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/cast.c.o
+[ 25%] Building C object CMakeFiles/c920_lib.dir/source/reference/clip.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/col2im.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/concat.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution1d.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution3d.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution_channel.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution_relu.c.o
+[ 26%] Building C object CMakeFiles/c920_lib.dir/source/reference/convolution_relu6.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/cos.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/cosh.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/cumprod.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/cumsum.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/data_convert.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/deconvolution.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/deconvolution3d.c.o
+[ 27%] Building C object CMakeFiles/c920_lib.dir/source/reference/depth_to_space.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/div.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/elu.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/embedding.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/equal.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/erf.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/exp.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/expand_dims.c.o
+[ 28%] Building C object CMakeFiles/c920_lib.dir/source/reference/expm1.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/flatten.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/floor.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/floor_divide.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/floor_mod.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/fsmn.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/fullyconnected.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/gather.c.o
+[ 29%] Building C object CMakeFiles/c920_lib.dir/source/reference/gather_nd.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/global_averagepool.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/global_maxpool.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/greater.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/greater_equal.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/im2col.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/hard_sigmoid.c.o
+[ 30%] Building C object CMakeFiles/c920_lib.dir/source/reference/instance_norm.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/isnan.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/l2_normalization.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/layer_norm.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/l2pool.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/leaky_relu.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/less.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/llm_pos.c.o
+[ 31%] Building C object CMakeFiles/c920_lib.dir/source/reference/less_equal.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/log.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/log1p.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/log_softmax.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/logical_and.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/logical_not.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/logical_or.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/logical_xor.c.o
+[ 32%] Building C object CMakeFiles/c920_lib.dir/source/reference/lrn.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/matmul.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/maximum.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/max.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/maxpool2d_locat.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/maxpool.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/maxpool3d.c.o
+[ 33%] Building C object CMakeFiles/c920_lib.dir/source/reference/mean.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/minimum.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/min.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/mod.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/mul.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/ndarray_size.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/negative.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/non_max_suppression.c.o
+[ 34%] Building C object CMakeFiles/c920_lib.dir/source/reference/not_equal.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/one_hot.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/not.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/or.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/pad.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/performance.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/prelu.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/power.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/prod.c.o
+[ 35%] Building C object CMakeFiles/c920_lib.dir/source/reference/proposal.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/psroipooling.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_logsumexp.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_max.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_mean.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_min.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_prod.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/reduce_sum.c.o
+[ 36%] Building C object CMakeFiles/c920_lib.dir/source/reference/relu.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/relu1.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/relu6.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/relun.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/reshape.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/resize.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/reverse.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/rms_norm.c.o
+[ 37%] Building C object CMakeFiles/c920_lib.dir/source/reference/roialign.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/roipool.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/rope.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/round.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/rsqrt.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/scaled_dot_product_attention.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/scatter.c.o
+[ 38%] Building C object CMakeFiles/c920_lib.dir/source/reference/segment_max.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/segment_mean.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/segment_min.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/segment_prod.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/segment_sum.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/select.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/setup.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/shape.c.o
+[ 39%] Building C object CMakeFiles/c920_lib.dir/source/reference/shuffle_channel.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/sigmoid.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/sign.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/silu.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/sin.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/sinh.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/slice.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/softmax.c.o
+[ 40%] Building C object CMakeFiles/c920_lib.dir/source/reference/softplus.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/softrelu.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/space_to_batch.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/softsign.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/space_to_depth.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/split.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/sqrt.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/square.c.o
+[ 41%] Building C object CMakeFiles/c920_lib.dir/source/reference/squeeze.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/stack.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/strided_slice.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/sub.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/sum.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/tan.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/tanh.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/threshold_relu.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/tile.c.o
+[ 42%] Building C object CMakeFiles/c920_lib.dir/source/reference/transpose.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/topk.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/trunc.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/unpooling.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/unstack.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/utils.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/where.c.o
+[ 43%] Building C object CMakeFiles/c920_lib.dir/source/reference/where_softmax.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/reference/xor.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/reference/yuv_rgb_scale.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/abs.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/acos.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/acosh.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/add.c.o
+[ 44%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/all.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/any.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/arange.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/and.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/argmax.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/argmin.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/asin.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/asinh.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/atan.c.o
+[ 45%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/atanh.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/avgpool.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/avgpool3d.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/batch_to_space.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/bn.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/batch_to_space_nd.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/broadcast_to.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cache_conv1d.c.o
+[ 46%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cast.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cache_matmul.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/ceil.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/clip.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/col2im.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/concat.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/convolution.c.o
+[ 47%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/convolution1d.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/convolution3d.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cos.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cosh.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/crop.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cumprod.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/cumsum.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/data_convert.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/deconvolution.c.o
+[ 48%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/depth_to_space.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/deconvolution3d.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/div.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/embedding.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/elu.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/equal.c.o
+[ 49%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/erf.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/expand_dims.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/exp.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/expm1.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/flatten.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/floor.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/floor_divide.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/floor_mod.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/fsmn.c.o
+[ 50%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/fullyconnected.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/gather.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/gather_nd.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/global_averagepool.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/global_maxpool.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/greater.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/greater_equal.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/hard_sigmoid.c.o
+[ 51%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/im2col.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/instance_norm.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/isnan.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/l2_normalization.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/l2pool.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/leaky_relu.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/layer_norm.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/less.c.o
+[ 52%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/less_equal.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/llm_pos.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/log.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/log_softmax.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/log1p.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/logical_and.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/logical_not.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/logical_or.c.o
+[ 53%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/lrn.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/logical_xor.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/matmul.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/max.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/maximum.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/maxpool.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/maxpool2d_locat.c.o
+[ 54%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/maxpool3d.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/min.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/mean.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/minimum.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/mod.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/mul.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/ndarray_size.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/negative.c.o
+[ 55%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/non_max_suppression.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/not.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/not_equal.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/one_hot.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/pad.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/or.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/power.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/prelu.c.o
+[ 56%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/prod.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/proposal.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/psroipooling.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_logsumexp.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_max.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_min.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_mean.c.o
+[ 57%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_prod.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/relu.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reduce_sum.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/relu1.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/relu6.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/relun.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reorg.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reshape.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/resize.c.o
+[ 58%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/reverse.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/rms_norm.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/roialign.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/roipool.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/rope.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/rsqrt.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/round.c.o
+[ 59%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/scaled_dot_product_attention.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/segment_max.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/scatter.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/segment_mean.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/segment_min.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/segment_sum.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/segment_prod.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/select.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sequence_mask.c.o
+[ 60%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/setup.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/shape.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/shuffle_channel.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sigmoid.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sign.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/silu.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sin.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sinh.c.o
+[ 61%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/softmax.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/slice.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/softplus.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/softrelu.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/softsign.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/space_to_batch.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/space_to_batch_nd.c.o
+[ 62%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/space_to_depth.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/split.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sqrt.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/square.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/squeeze.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/stack.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/strided_slice.c.o
+[ 63%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sub.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/sum.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/subgraph.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/tan.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/tanh.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/threshold_relu.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/tile.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/topk.c.o
+[ 64%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/transpose.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/unpooling.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/trunc.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/unstack.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/utils.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/where.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/where_softmax.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/xor.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/graph_ref/yuv_rgb_scale.c.o
+[ 65%] Building C object CMakeFiles/c920_lib.dir/source/tvm_gen/utils.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/tvm_gen/setup.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/capability.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/binary_broadcast.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/data_convert.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/add.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_2x2_fp16.c.o
+[ 66%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_2x2_fp16_packn.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_3x3_fp16.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_3x3_fp16_packn.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_fp16_nhwc.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/avgpool_fp16_packn.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/clip.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/concat.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution1d.c.o
+[ 67%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution1d_gemm_fp16.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_1x1_fp16.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_1x1_fp16_pack1ton.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_1x1_fp16_packn.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_1x1_fp16_packnto1.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_3x3_fp16_packn.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_direct_fp16.c.o
+[ 68%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_gemm_fp16.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_gemm_fp16_pack1ton.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_gemm_fp16_packn.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/convolution_gemm_fp16_packnto1.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/deconvolution.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/deconvolution_gemm_fp16.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/depthwise_convolution.c.o
+[ 69%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/depthwise_convolution_3x3_fp16.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/depthwise_convolution_3x3_fp16_packn.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/depthwise_convolution_fp16_nhwc.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/depthwise_convolution_fp16_packn.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/div.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/erf.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/expand_dims.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/fullyconnected.c.o
+[ 70%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/fullyconnected_fp16.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/gather.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/gemm_fp16.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/gemm_fp16_a0b1.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/gemm_fp16_block.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/gemm_fp16_packn.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_avgpool.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_avgpool_nhwc.c.o
+[ 71%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_avgpool_packn.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_maxpool.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_maxpool_nhwc.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/global_maxpool_packn.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/layer_norm.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/leaky_relu.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/llm_pos.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/matmul.c.o
+[ 72%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_2x2_fp16.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_2x2_fp16_packn.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_3x3_fp16.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_3x3_fp16_packn.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_fp16_nhwc.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/maxpool_fp16_packn.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/mul.c.o
+[ 73%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/pad.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/prelu.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/relu.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/relu6.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/reshape.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/rms_norm.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/rope.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/scaled_dot_product_attention.c.o
+[ 74%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/sigmoid.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/silu.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/split.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/softmax.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/strided_slice.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/sub.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp16/transpose.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/add.c.o
+[ 75%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_2x2_fp32.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_2x2_fp32_packn.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_3x3_fp32.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_3x3_fp32_packn.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_fp32_nhwc.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/avgpool_fp32_packn.c.o
+[ 76%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/clip.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/concat.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution1d.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution1d_gemm_fp32.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_1x1_fp32.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_1x1_fp32_pack1ton.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_1x1_fp32_packn.c.o
+[ 77%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_1x1_fp32_packnto1.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_3x3_fp32_packn.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_gemm_fp32.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_gemm_fp32_pack1ton.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_gemm_fp32_packn.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/convolution_gemm_fp32_packnto1.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/deconvolution.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/deconvolution_gemm_fp32.c.o
+[ 78%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/depthwise_convolution.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/depthwise_convolution_3x3_fp32.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/depthwise_convolution_3x3_fp32_packn.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/depthwise_convolution_fp32_nhwc.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/depthwise_convolution_fp32_packn.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/div.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/erf.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/expand_dims.c.o
+[ 79%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/fullyconnected.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/fullyconnected_fp32.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/gather.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/gemm_fp32.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/gemm_fp32_a0b1.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/gemm_fp32_block.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/gemm_fp32_packn.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_avgpool.c.o
+[ 80%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_avgpool_nhwc.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_avgpool_packn.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_maxpool.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_maxpool_nhwc.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/global_maxpool_packn.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/layer_norm.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/leaky_relu.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/matmul.c.o
+[ 81%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_2x2_fp32.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_2x2_fp32_packn.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_3x3_fp32.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_3x3_fp32_packn.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_fp32_nhwc.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/mul.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/maxpool_fp32_packn.c.o
+[ 82%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/pad.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/prelu.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/relu.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/relu6.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/reshape.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/rms_norm.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/rope.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/scaled_dot_product_attention.c.o
+[ 83%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/sigmoid.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/silu.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/softmax.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/split.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/sub.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/fp32/transpose.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int32/embedding.c.o
+[ 84%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/convolution.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/convolution_1x1_int4.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/convolution_1x1_int4_packn.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/convolution_gemm_int4.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/convolution_gemm_int4_packn.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/depthwise_convolution.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/depthwise_convolution_3x3_int4.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/fullyconnected_int4.c.o
+[ 85%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/gemm_int4_dot.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int4/gemm_int4_dot_packn.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/add.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/avgpool.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/avgpool_2x2_int8_packn.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/avgpool_3x3_int8_packn.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/avgpool_int8_nhwc.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/avgpool_int8_packn.c.o
+[ 86%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/clip.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/concat.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution1d.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution1d_1_int8.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_1x1_int8.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_1x1_int8_pack1ton.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_1x1_int8_packn.c.o
+[ 87%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_1x1_int8_packnto1.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_3x3_int8_packn.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_gemm_int8.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_gemm_int8_pack1ton.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_gemm_int8_packn.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/convolution_gemm_int8_packnto1.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution1d_int8.c.o
+[ 88%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution_3x3_int8.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution_3x3_int8_packn.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution_int8_nhwc.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/depthwise_convolution_int8_packn.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/div.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/erf.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/fullyconnected.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/fullyconnected_int8.c.o
+[ 89%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gather.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8_4xn.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8_a0b1.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8_dot.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8_dot_packn.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/gemm_int8_packn.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/global_avgpool_nhwc.c.o
+[ 90%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/global_avgpool_packn.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/global_maxpool_nhwc.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/global_maxpool_packn.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/layer_norm.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/leaky_relu.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/matmul.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/matmul_int8.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/matmul_int8_dot.c.o
+[ 91%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_2x2_int8.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_2x2_int8_packn.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_3x3_int8.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_3x3_int8_packn.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_int8_nhwc.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/maxpool_int8_packn.c.o
+[ 92%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/mul.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/pad.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/prelu.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/reduce_sum.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/relu.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/relu6.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/reshape.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/rms_norm.c.o
+[ 93%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/sigmoid.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/silu.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/softmax.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/split.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/sub.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/int8/transpose.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/performance.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/reorder.c.o
+[ 94%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/setup.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/thead_rvv/utils.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/capability.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/convolution.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/convolution_1x1_fp16_packn.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/convolution_3x3_fp16_packn.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/convolution_gemm_fp16_packn.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/fullyconnected.c.o
+[ 95%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_a0nb1n_fp16.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_a0nb1r_fp16.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_fp16_a0b1.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_fp16_block.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_fp16_packn.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/gemm_fp16_rearrange.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp16/matmul_fp16.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/convolution.c.o
+[ 96%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/convolution_1x1_fp32_packn.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/convolution_3x3_fp32_packn.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/convolution_gemm_fp32_packn.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/fullyconnected.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/gemm_a0nb1n_fp32.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/gemm_a0nb1r_fp32.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/gemm_fp32_a0b1.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/gemm_fp32_block.c.o
+[ 97%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/gemm_fp32_packn.c.o
+[ 98%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/fp32/matmul_fp32.c.o
+[ 98%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/performance.c.o
+[ 98%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/reorder.c.o
+[ 98%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/setup.c.o
+[ 98%] Building ASM object CMakeFiles/c920_lib.dir/source/c920_opt/shl_c920_f32_to_i8.S.o
+[ 98%] Building ASM object CMakeFiles/c920_lib.dir/source/c920_opt/shl_c920_f32_to_u8.S.o
+[ 98%] Building ASM object CMakeFiles/c920_lib.dir/source/c920_opt/shl_c920_i8_to_f32.S.o
+[ 98%] Building ASM object CMakeFiles/c920_lib.dir/source/c920_opt/shl_c920_u8_to_f32.S.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/utils.c.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/yolov5.c.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/c920_opt/yolox.c.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/llm/llama2.c.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/llm/llama2_quantize.c.o
+[ 99%] Building C object CMakeFiles/c920_lib.dir/source/llm/llm.c.o
+[ 99%] Building CXX object CMakeFiles/c920_lib.dir/source/llm/llm_json.cpp.o
+[100%] Linking CXX static library libshl_c920.a
+make[3]: Leaving directory '/data/csi-nn2/c920_build'
+[100%] Built target c920_lib
+make[2]: Leaving directory '/data/csi-nn2/c920_build'
+make[1]: Leaving directory '/data/csi-nn2/c920_build'
+make[1]: Entering directory '/data/csi-nn2/c920_build'
+make[2]: Entering directory '/data/csi-nn2/c920_build'
+make[3]: Entering directory '/data/csi-nn2/c920_build'
+Consolidate compiler generated dependencies of target c920_lib
+make[3]: Leaving directory '/data/csi-nn2/c920_build'
+[100%] Built target c920_lib
+make[2]: Leaving directory '/data/csi-nn2/c920_build'
+Install the project...
+-- Install configuration: "MinSizeRel"
+-- Installing: /data/csi-nn2/install_nn2/c920/lib/libshl_c920.a
+-- Installing: /data/csi-nn2/install_nn2/c920/include/.
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c906
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c906/c906.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c906/cap.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c906/perf.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c908
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c908/c908.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920/c920.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920/cap.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920/perf.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920v2
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920v2/c920v2.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920v2/cap.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/c920v2/perf.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/e907
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/e907/e907.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/pnna
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/pnna/pnna.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/pnna/wrapper.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/reference
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/reference/perf.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/reference/ref.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvm
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvm/rvm.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvv
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvv/cap.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvv/perf.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/rvv/rvv.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/tvmgen
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./backend/tvmgen/shl_tvmgen.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./csinn
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./csinn/csi_nn.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./csinn/csinn_data_structure.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./csinn/csinn_runtime.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./graph
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./graph/shl_gref.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./graph/shl_node.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./llm
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./llm/shl_llm.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./llm/shl_llm_json.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_debug.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_memory.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_multithread.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_profiler.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public/shl_c906.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public/shl_c920.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public/shl_pnna.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public/shl_ref.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_public/shl_tvmgen.h
+-- Installing: /data/csi-nn2/install_nn2/c920/include/./shl_utils.h
+make[1]: Leaving directory '/data/csi-nn2/c920_build'
+/data/csi-nn2

@@ -171,6 +171,23 @@ static void sess_op_init(struct csinn_session *sess)
     }
 }
 
+/**
+ * @brief Sets up a CSINN session for the C920 backend, initializing graph nodes and optionally saving a binary model.
+ *
+ * This function performs the following operations:
+ * - Retrieves the reference graph associated with the session.
+ * - Initializes session operations.
+ * - Iterates through all layers in the graph to update the reference count for input and output tensors.
+ * - Increments the reference count for all output tensors in the graph.
+ * - If the session is configured to save the model (in float16 or float32), it:
+ *   - Determines the binary model file path.
+ *   - Opens the file and writes the binary model header.
+ *   - Dumps the graph structure and graph info sections into the file at aligned offsets.
+ *   - Saves section information metadata.
+ *   - Closes the file.
+ *
+ * @param[in,out] sess Pointer to the CSINN session structure to be set up.
+ */
 void shl_c920_session_setup(struct csinn_session *sess)
 {
     struct shl_ref_graph *graph = shl_gref_get_graph(sess);
@@ -297,6 +314,21 @@ static void graph_match_session(struct shl_ref_graph *graph, struct csinn_sessio
     }
 }
 
+/**
+ * @brief Loads a binary model into the given CSINN session for the C920 backend.
+ *
+ * This function initializes the session with a binary model by:
+ *   - Retrieving the base address of the binary model from the session.
+ *   - Accessing the section information structure within the binary model.
+ *   - Allocating and loading the reference graph structure from the binary model.
+ *   - Matching the loaded graph with the session.
+ *   - Merging output information between the graph and the session.
+ *   - Initializing operation handlers for the binary model.
+ *   - Performing additional session operation initialization.
+ *
+ * @param[in,out] sess Pointer to the CSINN session structure to be initialized.
+ * @return CSINN_TRUE on successful loading and initialization.
+ */
 int shl_c920_load_binary_model(struct csinn_session *sess)
 {
     char *bm_base = sess->model.bm_addr;
@@ -313,6 +345,22 @@ int shl_c920_load_binary_model(struct csinn_session *sess)
     return CSINN_TRUE;
 }
 
+/**
+ * @brief Retrieves and processes the output tensor from a session for the C920 backend.
+ *
+ * This function fetches the output tensor at the specified index from the session and, if the
+ * session is configured to use the packn layout, converts the tensor's layout from NC1xC0 format
+ * (such as NC1DHWC0, NC1HWC0, NC1WC0, or NC1C0) to the standard NDArray layout in-place,
+ * depending on the tensor's data type (float32, float16, or int8).
+ *
+ * After conversion, the function updates the output tensor's dimension and layout metadata
+ * to reflect the new layout. If the data type is unsupported, an error is reported.
+ *
+ * @param index   The index of the output tensor to retrieve.
+ * @param output  Pointer to the output tensor structure to be processed.
+ * @param sess    Pointer to the session structure containing the output tensors and options.
+ * @return        CSINN_TRUE on success, or CSINN_UNSUPPORT_DTYPE if the data type is unsupported.
+ */
 int shl_c920_get_output(int index, struct csinn_tensor *output, struct csinn_session *sess)
 {
     struct csinn_tensor *sess_output = sess->output[index];
@@ -351,40 +399,65 @@ int shl_c920_get_output(int index, struct csinn_tensor *output, struct csinn_ses
     return CSINN_TRUE;
 }
 
+/**
+ * @brief Returns the appropriate runtime callback function pointer for the given API identifier.
+ *
+ * This function maps a given API identifier to its corresponding runtime callback function
+ * for the C920 backend. For certain API values, it delegates the callback resolution to the
+ * generic reference implementation.
+ *
+ * @param api The API identifier (e.g., CSINN_SESSION_INIT, CSINN_SESSION_DEINIT, etc.).
+ * @return Pointer to the corresponding callback function, or NULL if not found.
+ *
+ * The following API identifiers are handled:
+ * - CSINN_SESSION_INIT:        Returns pointer to shl_c920_session_init.
+ * - CSINN_SESSION_DEINIT:      Returns pointer to shl_c920_session_deinit.
+ * - CSINN_SESSION_SETUP:       Returns pointer to shl_c920_session_setup.
+ * - CSINN_LOAD_BG:             Returns pointer to shl_c920_load_binary_model.
+ * - CSINN_GET_OUTPUT:          Returns pointer to shl_c920_get_output.
+ * - CSINN_SESSION_RUN, CSINN_UPDATE_INPUT, CSINN_UPDATE_OUTPUT,
+ *   CSINN_SET_INPUT_NUMBER, CSINN_SET_OUTPUT_NUMBER, CSINN_SET_INPUT,
+ *   CSINN_SET_OUTPUT, CSINN_GET_INPUT, CSINN_TENSOR_ENTRY:
+ *      Delegates to shl_gref_runtime_callback(api).
+ *
+ * If the API identifier is not recognized, logs a debug message and returns NULL.
+ */
 void *shl_c920_runtime_callback(int api)
 {
     switch (api) {
-        case CSINN_SESSION_INIT:
+        case CSINN_SESSION_INIT:                // 0
             return shl_c920_session_init;
-            break;
-        case CSINN_SESSION_DEINIT:
+        case CSINN_SESSION_DEINIT:              // 1  
             return shl_c920_session_deinit;
-            break;
-        case CSINN_SESSION_SETUP:
+        case CSINN_SESSION_SETUP:               // 2
             return shl_c920_session_setup;
-            break;
-        case CSINN_LOAD_BG:
+        case CSINN_LOAD_BG:                     // 15
             return shl_c920_load_binary_model;
-            break;
-        case CSINN_GET_OUTPUT:
+        case CSINN_GET_OUTPUT:                  // 13
             return shl_c920_get_output;
-            break;
-        case CSINN_SESSION_RUN:
-        case CSINN_UPDATE_INPUT:
-        case CSINN_UPDATE_OUTPUT:
-        case CSINN_SET_INPUT_NUMBER:
-        case CSINN_SET_OUTPUT_NUMBER:
-        case CSINN_SET_INPUT:
-        case CSINN_SET_OUTPUT:
-        case CSINN_GET_INPUT:
-        case CSINN_TENSOR_ENTRY:
+        case CSINN_SESSION_RUN:                 // 3
+        case CSINN_UPDATE_INPUT:                // 4
+        case CSINN_UPDATE_OUTPUT:               // 5
+        case CSINN_SET_INPUT_NUMBER:            // 6
+        case CSINN_SET_OUTPUT_NUMBER:           // 7
+        case CSINN_GET_INPUT_NUMBER:            // 8
+        case CSINN_GET_OUTPUT_NUMBER:           // 9
+        // These APIs are used to manage session inputs and outputs.
+        // They are not specific to C920 and can be handled by the generic reference implementation.
+        case CSINN_SET_INPUT:                   // 10
+        case CSINN_SET_OUTPUT:                  // 11
+        case CSINN_GET_INPUT:                   // 12
+            // For these APIs, we delegate to the generic reference implementation
+            // as they are not specific to C920.
+            // This allows for a consistent interface across different backends.
+            // The actual implementation will be handled by shl_gref_runtime_callback.
+            // This is useful for operations that are common across different backends.
+        case CSINN_TENSOR_ENTRY:                // 14   
             return shl_gref_runtime_callback(api);
-            break;
         default:
-            shl_debug_info("%s: Cannot find callback\n", __func__);
-            break;
+            shl_debug_error("%s: Invalid API Num: %d. Returning NULL.\n", __func__, api);
+            return NULL;
     }
-    return NULL;
 }
 
 void shl_target_init_c920()
