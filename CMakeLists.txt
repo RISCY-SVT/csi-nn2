@@ -90,6 +90,7 @@ if(CONFIG_BUILD_RISCV_C908)
     include(cmake/target_build.cmake)
 endif()
 
+# =========================================================================================
 if(CONFIG_BUILD_RISCV_C920)
     # build c920 lib
     set(CONFIG_GRAPH_REFERENCE_TVMGEN ON)
@@ -102,6 +103,7 @@ if(CONFIG_BUILD_RISCV_C920)
     include(cmake/target_build.cmake)
     target_include_directories(${SHL_LIB_TARGET} PRIVATE module/dlpack/include/)
 endif()
+# =========================================================================================
 
 if(CONFIG_BUILD_RISCV_C920V2)
     # build c920v2 lib

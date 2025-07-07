@@ -28,6 +28,12 @@
 #define RVV_0_7_1
 #endif
 
+#include <riscv_vector_v0p10.h>
+#include <riscv_vector_v0p10_bf16.h>
+#include <riscv_vector_v0p10_non_policy.h>
+#include <riscv_vector_v0p10_non_policy_common.h>
+#include <riscv_vector_v0p10_vsseg_common.h>
+
 #ifdef __riscv_xtheadvdot
 #ifndef SHL_DISABLE_VDOT
 #define XTHEADVDOT

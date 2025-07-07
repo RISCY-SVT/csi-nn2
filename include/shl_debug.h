@@ -35,7 +35,7 @@ void shl_debug_info(const char *format, ...);
 void shl_debug_warning(const char *format, ...);
 void shl_debug_error(const char *format, ...);
 void shl_debug_fatal(const char *format, ...);
-int shl_debug_callback_unset();
+int shl_debug_callback_unset(char *func_name);
 #else
 #define SHL_DEBUG_CALL(func)
 inline void shl_debug_debug(const char *format, ...) {}

@@ -57,8 +57,7 @@ int shl_c920_conv2d_init_fp16(struct csinn_tensor *input, struct csinn_tensor *o
 
     // packn
     if (in_elempack % packn == 0 && out_elempack % packn == 0) {
-        if (kernel_h == 1 && kernel_w == 1 && stride_h == 1 && stride_w == 1 && dilation_h == 1 &&
-            dilation_w == 1) {
+        if (kernel_h == 1 && kernel_w == 1 && stride_h == 1 && stride_w == 1 && dilation_h == 1 && dilation_w == 1) {
             params->conv_extra.conv_mode = CSINN_GEMM;
             if (!binary_model_op_init) {
                 if (kernel->is_const && kernel->dtype == CSINN_DTYPE_INT8) {
@@ -68,8 +67,7 @@ int shl_c920_conv2d_init_fp16(struct csinn_tensor *input, struct csinn_tensor *o
                 }
             }
             cb->exec = shl_c920_conv1x1s1_gemm_packn_fp16;
-        } else if (kernel_h == 3 && kernel_w == 3 && stride_h == 1 && stride_w == 1 &&
-                   dilation_h == 1 && dilation_w == 1) {
+        } else if (kernel_h == 3 && kernel_w == 3 && stride_h == 1 && stride_w == 1 && dilation_h == 1 && dilation_w == 1) {
             if (params->group > 1 || (kernel->is_const && kernel->dtype == CSINN_DTYPE_INT8)) {
                 params->conv_extra.conv_mode = CSINN_GEMM;
                 if (!binary_model_op_init) {

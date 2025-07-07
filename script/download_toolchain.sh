@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ROOT_PATH=$PWD
-GCC_LINK=https://github.com/T-head-Semi/csi-nn2/releases/download/v1.12.1/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.4.0-20220428.tar.gz
+GCC_LINK="https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1749714096626/Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V3.1.0-20250522.tar.gz"
 TAR_FILE=$ROOT_PATH/tools/Xuantie-900-gcc-linux-toolchain.tar.gz
 
 # create dir
