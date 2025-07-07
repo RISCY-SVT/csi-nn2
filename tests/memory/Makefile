@@ -130,7 +130,7 @@ info: $(TARGET)
 	@$(TOOLCHAIN_PREFIX)nm $(TARGET) | grep -E "(shl_mem_|malloc|free)" | head -20
 
 clean:
-	rm -f $(TARGET) $(TARGET_MINIMAL) $(TARGET_PERF) *.o *.S
+	rm -f $(TARGET) $(TARGET_MINIMAL) $(TARGET_PERF) $(TARGET_MULTITHREAD) *.o *.S
 
 # Run tests on target
 run: $(TARGET)

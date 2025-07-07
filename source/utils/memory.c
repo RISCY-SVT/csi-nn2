@@ -94,12 +94,40 @@ static pthread_mutex_t shl_mem_debug_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define MUTEX_UNLOCK()
 #endif
 
+// Guard byte pattern
+static const uint8_t GUARD_PATTERN[8] = {0xff, 0x23, 0x33, 0x44, 0x45, 0x55, 0x67, 0xff};
+#define GUARD_SIZE 8
+
 // Simple hash function for pointers
 static inline uint32_t ptr_hash(void *ptr) {
     uintptr_t addr = (uintptr_t)ptr;
     // Simple multiplicative hash
     return (uint32_t)((addr >> 4) * 2654435761U);
 }
+
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+// Check guard bytes integrity
+static inline int check_guard_bytes(const uint8_t *guard_ptr) {
+    return memcmp(guard_ptr, GUARD_PATTERN, GUARD_SIZE) == 0;
+}
+
+// Set guard bytes
+static inline void set_guard_bytes(uint8_t *guard_ptr) {
+    memcpy(guard_ptr, GUARD_PATTERN, GUARD_SIZE);
+}
+
+// Report guard byte corruption
+static inline void report_guard_corruption(const uint8_t *guard_ptr) {
+    shl_debug_error("Memory corruption detected!\n");
+    shl_debug_error("Guard bytes corruption details:\n");
+    for (int i = 0; i < GUARD_SIZE; i++) {
+        if (guard_ptr[i] != GUARD_PATTERN[i]) {
+            shl_debug_error("  Byte %d: expected 0x%02x, got 0x%02x\n", 
+                           i, GUARD_PATTERN[i], guard_ptr[i]);
+        }
+    }
+}
+#endif
 
 // Find element in debug map using hash
 static struct shl_mem_alloc_debug_element_* shl_mem_map_find(void *ptr) {
@@ -112,7 +140,7 @@ static struct shl_mem_alloc_debug_element_* shl_mem_map_find(void *ptr) {
     // Quick hash-based search first
     for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
         struct shl_mem_alloc_debug_element_ *e = &shl_mem_alloc_debug_map.element[i];
-        if (e->guard_hash == hash && e->ptr == ptr && e->is_free == 0) {
+        if (e->guard_hash == hash && e->ptr == ptr) {
             return e;
         }
     }
@@ -120,7 +148,7 @@ static struct shl_mem_alloc_debug_element_* shl_mem_map_find(void *ptr) {
     // Linear search for backward compatibility
     for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
         struct shl_mem_alloc_debug_element_ *e = &shl_mem_alloc_debug_map.element[i];
-        if (e->ptr == ptr && e->is_free == 0) {
+        if (e->ptr == ptr) {
             return e;
         }
     }
@@ -288,7 +316,11 @@ static int shl_mem_map_insert(void *ptr, uint64_t size)
  * - Caller is responsible for freeing allocated memory
  * - Guard bytes should not be modified when debug mode is active
  */
-__attribute__((weak)) void *shl_mem_alloc(int64_t size)
+#if defined(__GNUC__) && __GNUC__ >= 11
+__attribute__((weak, malloc, malloc(shl_mem_free, 1))) void *shl_mem_alloc(int64_t size)
+#else
+__attribute__((weak, malloc)) void *shl_mem_alloc(int64_t size)
+#endif
 {
     void *ret;
     
@@ -310,25 +342,16 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
     }
     
 #ifdef SHL_MEM_DEBUG_VALID_WRITE
-    // Check for overflow when adding  guard bytes
-    const size_t guard_size = 8;
-    if ((size_t)size > SIZE_MAX - guard_size) {
+    // Check for overflow when adding guard bytes
+    if ((size_t)size > SIZE_MAX - GUARD_SIZE) {
         shl_debug_error("Size overflow with guard bytes: %" PRId64 "\n", size);
         return NULL;
     }
     
-    ret = calloc(1, (size_t)size + guard_size);
+    ret = calloc(1, (size_t)size + GUARD_SIZE);
     if (ret != NULL) {
         uint8_t *check_ptr = ((uint8_t *)ret) + size;
-        /* magic number */
-        check_ptr[0] = 0xff;
-        check_ptr[1] = 0x23;
-        check_ptr[2] = 0x33;
-        check_ptr[3] = 0x44;
-        check_ptr[4] = 0x45;
-        check_ptr[5] = 0x55;
-        check_ptr[6] = 0x67;
-        check_ptr[7] = 0xff;
+        set_guard_bytes(check_ptr);
     }
 #else
 #ifdef SHL_USE_ATAT_MALLOC
@@ -531,6 +554,7 @@ void *shl_mem_alloc_aligned(int64_t size, int aligned_bytes)
  * - Tracks the deallocation in the debug map
  * - Updates total allocated memory size
  * - Marks the allocation entry as freed
+ * - Detects and reports double-free attempts
  * - Warns if attempting to free an untracked pointer
  * 
  * When SHL_MEM_DEBUG_VALID_WRITE is also enabled:
@@ -557,6 +581,13 @@ __attribute__((weak)) void shl_mem_free(void *ptr)
     struct shl_mem_alloc_debug_element_ *e = shl_mem_map_find(ptr);
     
     if (e != NULL) {
+        // Check for double free
+        if (e->is_free) {
+            shl_debug_error("Double free detected for pointer %p!\n", ptr);
+            MUTEX_UNLOCK();
+            return;
+        }
+        
         e->is_free = 1;
         shl_mem_alloc_debug_map.total_size -= e->size;
         shl_mem_alloc_debug_map.free_slots++;
@@ -564,19 +595,9 @@ __attribute__((weak)) void shl_mem_free(void *ptr)
         
 #ifdef SHL_MEM_DEBUG_VALID_WRITE
         uint8_t *cptr = ((uint8_t *)ptr) + e->size;
-        if ((cptr[0] == 0xff) && (cptr[1] == 0x23) && (cptr[2] == 0x33) && (cptr[3] == 0x44) &&
-            (cptr[4] == 0x45) && (cptr[5] == 0x55) && (cptr[6] == 0x67) && (cptr[7] == 0xff)) {
-            // Guard bytes intact
-        } else {
-            shl_debug_error("Memory corruption detected at %p!\n", ptr);
-            // Detailed corruption info
-            for (int j = 0; j < 8; j++) {
-                if (cptr[j] != ((uint8_t[]){0xff, 0x23, 0x33, 0x44, 0x45, 0x55, 0x67, 0xff})[j]) {
-                    shl_debug_error("  Guard byte %d: expected 0x%02x, got 0x%02x\n", 
-                           j, ((uint8_t[]){0xff, 0x23, 0x33, 0x44, 0x45, 0x55, 0x67, 0xff})[j], 
-                           cptr[j]);
-                }
-            }
+        if (!check_guard_bytes(cptr)) {
+            shl_debug_error("Buffer overflow detected at %p (size=%" PRId64 ")!\n", ptr, e->size);
+            report_guard_corruption(cptr);
         }
 #endif
     } else {
