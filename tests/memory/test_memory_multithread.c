@@ -1,4 +1,3 @@
-
 /**
  * @file test_memory_multithread.c
  * @brief Multithreaded stress test for CSI-NN2 memory allocation system
@@ -25,7 +24,7 @@
  * @return 0 if all tests pass (no leaks, no errors), 1 if failures detected
  * 
  * @author Custler
- * @version 1.0
+ * @version 1.1
  * @date 2025
  */
 
@@ -38,10 +37,10 @@
 #include <string.h>
 #include <stdint.h>
 #include <pthread.h>
-#include <unistd.h>
-#include <sys/sysinfo.h>
-#include <time.h>
-#include <sched.h>
+#include <unistd.h>       // For usleep()
+#include <sys/sysinfo.h>  // For get_nprocs()
+#include <time.h>         // For time()
+#include <sched.h>        // For CPU_SET, CPU_ZERO
 
 // Do not enable debug features for a clean multithreading test
 #include "shl_memory.h"
@@ -183,12 +182,29 @@ int main() {
     pthread_t *threads = calloc(num_threads, sizeof(pthread_t));
     struct thread_data *thread_data = calloc(num_threads, sizeof(struct thread_data));
     
+    if (threads == NULL || thread_data == NULL) {
+        printf("Failed to allocate memory for test infrastructure\n");
+        free(threads);
+        free(thread_data);
+        return 1;
+    }
+    
     // Start threads
     uint64_t start_time = time(NULL);
     
     for (int i = 0; i < num_threads; i++) {
         thread_data[i].thread_id = i;
-        pthread_create(&threads[i], NULL, thread_worker, &thread_data[i]);
+        if (pthread_create(&threads[i], NULL, thread_worker, &thread_data[i]) != 0) {
+            printf("Failed to create thread %d\n", i);
+            // Clean up already created threads
+            for (int j = 0; j < i; j++) {
+                pthread_cancel(threads[j]);
+                pthread_join(threads[j], NULL);
+            }
+            free(threads);
+            free(thread_data);
+            return 1;
+        }
     }
     
     // Wait for threads to finish
@@ -224,16 +240,19 @@ int main() {
     printf("  Memory leak: %ld bytes\n", (long)(total_allocated - total_freed));
     printf("  Time elapsed: %lu seconds\n", elapsed);
     
+    // Determine test result
+    int test_result = 0;
     if (total_allocated == total_freed && total_errors == 0) {
         printf("\nTEST PASSED: All memory properly managed, no errors\n");
-        return 0;
+        test_result = 0;
     } else {
         printf("\nTEST FAILED: Memory leaks or errors detected\n");
-        return 1;
+        test_result = 1;
     }
     
+    // Clean up test infrastructure
     free(threads);
     free(thread_data);
     
-    return 0;
+    return test_result;
 }

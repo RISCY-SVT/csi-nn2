@@ -44,6 +44,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <stdint.h>
+#include <inttypes.h>  // For PRId64, PRIu64
 
 #include "shl_utils.h"
 
@@ -55,10 +56,14 @@
 #include <pthread.h>
 #endif
 
+/* Debug memory tracking structures */
 struct shl_mem_alloc_debug_element_ {
     void *ptr;
     int64_t size;
     int is_free;
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+    uint32_t guard_hash;  // For quick hash table lookup
+#endif
 };
 
 struct shl_mem_alloc_debug_map_ {
@@ -66,6 +71,7 @@ struct shl_mem_alloc_debug_map_ {
     int element_number;
     int index;
     int64_t total_size;
+    int free_slots;  // Number of free slots for reuse
 };
 
 static struct shl_mem_alloc_debug_map_ shl_mem_alloc_debug_map;
@@ -77,22 +83,79 @@ static pthread_mutex_t shl_mem_debug_mutex = PTHREAD_MUTEX_INITIALIZER;
 #define MUTEX_LOCK()   pthread_mutex_lock(&shl_mem_debug_mutex)
 #define MUTEX_UNLOCK() pthread_mutex_unlock(&shl_mem_debug_mutex)
 #else
+#error "RTOS build with SHL_MEM_DEBUG requires mutex implementation"
 // For RTOS, we need to define MUTEX_LOCK and MUTEX_UNLOCK
 #define MUTEX_LOCK()   /* TODO: Implement for RTOS */
 #define MUTEX_UNLOCK() /* TODO: Implement for RTOS */
 #endif
+#else
+// When SHL_MEM_DEBUG is not defined, make these no-ops
+#define MUTEX_LOCK()
+#define MUTEX_UNLOCK()
 #endif
+
+// Simple hash function for pointers
+static inline uint32_t ptr_hash(void *ptr) {
+    uintptr_t addr = (uintptr_t)ptr;
+    // Simple multiplicative hash
+    return (uint32_t)((addr >> 4) * 2654435761U);
+}
+
+// Find element in debug map using hash
+static struct shl_mem_alloc_debug_element_* shl_mem_map_find(void *ptr) {
+    if (shl_mem_alloc_debug_map.element == NULL || shl_mem_alloc_debug_map.index == 0) {
+        return NULL;
+    }
+    
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+    uint32_t hash = ptr_hash(ptr);
+    // Quick hash-based search first
+    for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
+        struct shl_mem_alloc_debug_element_ *e = &shl_mem_alloc_debug_map.element[i];
+        if (e->guard_hash == hash && e->ptr == ptr && e->is_free == 0) {
+            return e;
+        }
+    }
+#else
+    // Linear search for backward compatibility
+    for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
+        struct shl_mem_alloc_debug_element_ *e = &shl_mem_alloc_debug_map.element[i];
+        if (e->ptr == ptr && e->is_free == 0) {
+            return e;
+        }
+    }
+#endif
+    return NULL;
+}
+
+// Find free slot for reuse
+static int shl_mem_map_find_free_slot() {
+    if (shl_mem_alloc_debug_map.free_slots > 0) {
+        for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
+            if (shl_mem_alloc_debug_map.element[i].is_free) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
 
 void shl_mem_print_map()
 {
 #ifdef SHL_MEM_DEBUG
     MUTEX_LOCK();
     
-    printf("total size = %ld\n", shl_mem_alloc_debug_map.total_size);
-    for (int i = 0; i <= shl_mem_alloc_debug_map.index; i++) {
+    shl_debug_info("Memory map: total size = %" PRId64 "\n", shl_mem_alloc_debug_map.total_size);
+    int active_count = 0;
+    for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
         struct shl_mem_alloc_debug_element_ *e = shl_mem_alloc_debug_map.element + i;
-        printf("element %d: ptr = %p, size = %ld, is_free = %d\n", i, e->ptr, e->size, e->is_free);
+        if (!e->is_free) {
+            shl_debug_info("  [%d]: ptr=%p, size=%" PRId64 "\n", i, e->ptr, e->size);
+            active_count++;
+        }
     }
+    shl_debug_info("Active allocations: %d, Free slots: %d\n", 
+                   active_count, shl_mem_alloc_debug_map.free_slots);
     
     MUTEX_UNLOCK();
 #endif
@@ -125,6 +188,22 @@ static int shl_mem_map_insert(void *ptr, uint64_t size)
 {
     // IMPORTANT: This function should only be called under mutex protection!
 
+    // First try to find a free slot
+    int slot = shl_mem_map_find_free_slot();
+    
+    if (slot >= 0) {
+        // Reuse existing slot
+        shl_mem_alloc_debug_map.element[slot].ptr = ptr;
+        shl_mem_alloc_debug_map.element[slot].size = size;
+        shl_mem_alloc_debug_map.element[slot].is_free = 0;
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+        shl_mem_alloc_debug_map.element[slot].guard_hash = ptr_hash(ptr);
+#endif
+        shl_mem_alloc_debug_map.free_slots--;
+        return 0;
+    }
+    
+    // Need to expand the array
     int element_number = shl_mem_alloc_debug_map.element_number;
     int index = shl_mem_alloc_debug_map.index;
     
@@ -145,8 +224,15 @@ static int shl_mem_map_insert(void *ptr, uint64_t size)
         size_t new_size = (size_t)new_number * sizeof(struct shl_mem_alloc_debug_element_);
         
         // Use regular realloc, as shl_mem_alloc may cause recursion
+        // Temporarily release mutex to avoid deadlock
+#ifdef SHL_MEM_DEBUG
+        MUTEX_UNLOCK();
+#endif
         struct shl_mem_alloc_debug_element_ *new_elements = realloc(
             shl_mem_alloc_debug_map.element, new_size);
+#ifdef SHL_MEM_DEBUG
+        MUTEX_LOCK();
+#endif
         
         if (new_elements == NULL) {
             shl_debug_error("Failed to grow allocation tracking table\n");
@@ -161,9 +247,14 @@ static int shl_mem_map_insert(void *ptr, uint64_t size)
         shl_mem_alloc_debug_map.element = new_elements;
     }
     
-    shl_mem_alloc_debug_map.element[index].ptr = ptr;
-    shl_mem_alloc_debug_map.element[index].size = size;
-    shl_mem_alloc_debug_map.element[index].is_free = 0;
+    // Add new element
+    slot = shl_mem_alloc_debug_map.index;
+    shl_mem_alloc_debug_map.element[slot].ptr = ptr;
+    shl_mem_alloc_debug_map.element[slot].size = size;
+    shl_mem_alloc_debug_map.element[slot].is_free = 0;
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+    shl_mem_alloc_debug_map.element[slot].guard_hash = ptr_hash(ptr);
+#endif
     shl_mem_alloc_debug_map.index++;
     return 0;
 }
@@ -203,7 +294,7 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
     
     // Check for negative size
     if (size < 0) {
-        shl_debug_error("Negative size requested: %lld\n", (long long)size);
+        shl_debug_error("Negative size requested: %" PRId64 "\n", size);
         return NULL;
     }
     
@@ -214,7 +305,7 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
     
     // Check for overflow for 32-bit systems
     if (sizeof(size_t) < sizeof(int64_t) && size > (int64_t)SIZE_MAX) {
-        shl_debug_error("Size too large for platform: %lld > SIZE_MAX\n", (long long)size);
+        shl_debug_error("Size too large for platform: %" PRId64 " > SIZE_MAX\n", size);
         return NULL;
     }
     
@@ -222,13 +313,13 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
     // Check for overflow when adding  guard bytes
     const size_t guard_size = 8;
     if ((size_t)size > SIZE_MAX - guard_size) {
-        shl_debug_error("Size overflow with guard bytes: %lld\n", (long long)size);
+        shl_debug_error("Size overflow with guard bytes: %" PRId64 "\n", size);
         return NULL;
     }
     
     ret = calloc(1, (size_t)size + guard_size);
     if (ret != NULL) {
-        int8_t *check_ptr = ((int8_t *)ret) + size;
+        uint8_t *check_ptr = ((uint8_t *)ret) + size;
         /* magic number */
         check_ptr[0] = 0xff;
         check_ptr[1] = 0x23;
@@ -249,7 +340,7 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
 #endif
 
     if (ret == NULL) {
-        shl_debug_error("cannot alloc memory\n");
+        shl_debug_error("cannot alloc memory (size=%" PRId64 ")\n", size);
     }
     
 #ifdef SHL_MEM_DEBUG
@@ -260,8 +351,8 @@ __attribute__((weak)) void *shl_mem_alloc(int64_t size)
             shl_debug_warning("Failed to track allocation\n");
         } else {
             shl_mem_alloc_debug_map.total_size += size;
-            printf("shl_mem_alloc: total size = %ld, get size is %lld\n",
-                   shl_mem_alloc_debug_map.total_size, size);
+            shl_debug_info("shl_mem_alloc: total=%" PRId64 ", size=%" PRId64 "\n",
+                          shl_mem_alloc_debug_map.total_size, size);
         }
         
         MUTEX_UNLOCK();
@@ -332,29 +423,40 @@ void *shl_mem_realloc(void *ptr, size_t size, size_t orig_size)
         return NULL;  // Do not free old memory on failure
     }
     
+    // Copy minimum of old and new size
+    size_t copy_size = (orig_size < size) ? orig_size : size;
+    
+#ifdef SHL_MEM_DEBUG_VALID_WRITE
+    // With debug enabled, copy data without guard bytes
+    if (orig_size > 0) {
+        memcpy(ret, ptr, copy_size);
+    } else {
+        // If orig_size == 0, copy size bytes but check guard bytes
+        memcpy(ret, ptr, size);
+    }
+#else
     if (orig_size == 0) {
         shl_debug_warning(
             "New size(instead of original size) will be applied into memcpy, which may cause "
             "problems.\n");
         memcpy(ret, ptr, size);
     } else {
-        // Copy the minimum of old and new size
-        size_t copy_size = (orig_size < size) ? orig_size : size;
         memcpy(ret, ptr, copy_size);
     }
-    
+#endif
+    // Free the old memory block
     shl_mem_free(ptr);
     return ret;
 }
 
 void *shl_mem_alloc_aligned(int64_t size, int aligned_bytes)
 {
-    void *ptr = NULL;
+    void *result_ptr = NULL;
     
     // Check for negative size
     if (size <= 0 || aligned_bytes <= 0) {
-        shl_debug_error("Invalid parameters: size=%lld, aligned_bytes=%d\n", 
-                       (long long)size, aligned_bytes);
+        shl_debug_error("Invalid parameters: size=%" PRId64 ", aligned_bytes=%d\n", 
+                       size, aligned_bytes);
         return NULL;
     }
     
@@ -369,8 +471,8 @@ void *shl_mem_alloc_aligned(int64_t size, int aligned_bytes)
     // Need space for: size + alignment + pointer to original
     size_t extra_size = aligned_bytes + sizeof(void*);
     if ((size_t)size > SIZE_MAX - extra_size) {
-        shl_debug_error("Integer overflow detected: size=%lld, aligned_bytes=%d\n",
-                       (long long)size, aligned_bytes);
+        shl_debug_error("Integer overflow detected: size=%" PRId64 ", aligned_bytes=%d\n",
+                       size, aligned_bytes);
         return NULL;
     }
     
@@ -389,8 +491,14 @@ void *shl_mem_alloc_aligned(int64_t size, int aligned_bytes)
     void **ptr_to_orig = (void**)(aligned_addr - sizeof(void*));
     *ptr_to_orig = tptr;
     
-    ptr = (void*)aligned_addr;
+    result_ptr = (void*)aligned_addr;
 #else
+    // Check size for posix_memalign
+    if (sizeof(size_t) < sizeof(int64_t) && size > (int64_t)SIZE_MAX) {
+        shl_debug_error("Size too large for posix_memalign: %" PRId64 "\n", size);
+        return NULL;
+    }
+    
     if (aligned_bytes == 0) {
         aligned_bytes = getpagesize();
     }
@@ -400,13 +508,14 @@ void *shl_mem_alloc_aligned(int64_t size, int aligned_bytes)
         aligned_bytes = sizeof(void*);
     }
     
-    int ret = posix_memalign(&ptr, aligned_bytes, size);
-    if (ret || ptr == NULL) {
-        shl_debug_error("cannot alloc aligned memory, error code: %d\n", ret);
+    int rc = posix_memalign(&result_ptr, aligned_bytes, (size_t)size);
+    if (rc != 0) {
+        shl_debug_error("posix_memalign failed with error %d\n", rc);
+        return NULL;
     }
 #endif
     
-    return ptr;
+    return result_ptr;
 }
 
 /**
@@ -445,35 +554,32 @@ __attribute__((weak)) void shl_mem_free(void *ptr)
 #ifdef SHL_MEM_DEBUG
     MUTEX_LOCK();
     
-    int found = 0;
-    for (int i = 0; i < shl_mem_alloc_debug_map.index; i++) {
-        struct shl_mem_alloc_debug_element_ *e = shl_mem_alloc_debug_map.element + i;
-        if (e->ptr == ptr && e->is_free == 0) {
-            e->is_free = 1;
-            shl_mem_alloc_debug_map.total_size -= e->size;
-            printf("shl_mem_free: total size = %ld\n", shl_mem_alloc_debug_map.total_size);
-            
+    struct shl_mem_alloc_debug_element_ *e = shl_mem_map_find(ptr);
+    
+    if (e != NULL) {
+        e->is_free = 1;
+        shl_mem_alloc_debug_map.total_size -= e->size;
+        shl_mem_alloc_debug_map.free_slots++;
+        shl_debug_info("shl_mem_free: total=%" PRId64 "\n", shl_mem_alloc_debug_map.total_size);
+        
 #ifdef SHL_MEM_DEBUG_VALID_WRITE
-            uint8_t *cptr = ptr + e->size;
-            if ((cptr[0] == 0xff) && (cptr[1] == 0x23) && (cptr[2] == 0x33) && (cptr[3] == 0x44) &&
-                (cptr[4] == 0x45) && (cptr[5] == 0x55) && (cptr[6] == 0x67) && (cptr[7] == 0xff)) {
-                // Guard bytes intact
-            } else {
-                printf("shl_mem_free: invalid write %p\n", ptr);
-                // Detailed information about corruption
-                for (int j = 0; j < 8; j++) {
-                    printf("  Guard byte %d: expected 0x%02x, got 0x%02x\n", 
+        uint8_t *cptr = ((uint8_t *)ptr) + e->size;
+        if ((cptr[0] == 0xff) && (cptr[1] == 0x23) && (cptr[2] == 0x33) && (cptr[3] == 0x44) &&
+            (cptr[4] == 0x45) && (cptr[5] == 0x55) && (cptr[6] == 0x67) && (cptr[7] == 0xff)) {
+            // Guard bytes intact
+        } else {
+            shl_debug_error("Memory corruption detected at %p!\n", ptr);
+            // Detailed corruption info
+            for (int j = 0; j < 8; j++) {
+                if (cptr[j] != ((uint8_t[]){0xff, 0x23, 0x33, 0x44, 0x45, 0x55, 0x67, 0xff})[j]) {
+                    shl_debug_error("  Guard byte %d: expected 0x%02x, got 0x%02x\n", 
                            j, ((uint8_t[]){0xff, 0x23, 0x33, 0x44, 0x45, 0x55, 0x67, 0xff})[j], 
                            cptr[j]);
                 }
             }
-#endif
-            found = 1;
-            break;
         }
-    }
-    
-    if (!found) {
+#endif
+    } else {
         shl_debug_warning("Attempting to free untracked pointer %p\n", ptr);
     }
     
@@ -487,6 +593,7 @@ __attribute__((weak)) void shl_mem_free(void *ptr)
     free(ptr);
 #endif
 }
+
 
 /**
  * @brief Frees memory that was allocated with alignment requirements in RTOS environment.
@@ -515,7 +622,7 @@ void shl_mem_free_aligned(void *ptr)
     }
     
     // Get the original pointer
-    void **ptr_to_orig = (void**)((char*)ptr - sizeof(void*));
+    void **ptr_to_orig = (void**)((uint8_t *)ptr - sizeof(void*));
     void *orig_ptr = *ptr_to_orig;
     shl_mem_free(orig_ptr);
 }
