@@ -24,8 +24,11 @@
 
 #if (__riscv_v == 1000000)
 #define RVV_1_0_0
+// #pragma message ("+++-WARNING: Compile with RVV 1.0.0")
 #elif (__riscv_v == 7000)
 #define RVV_0_7_1
+// #pragma message ("+++-WARNING: Compile with RVV 0.7.1")
+
 #endif
 
 #include <riscv_vector_v0p10.h>

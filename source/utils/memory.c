@@ -251,28 +251,28 @@ static int shl_mem_map_insert(void *ptr, uint64_t size)
         int new_number = element_number + 512;
         size_t new_size = (size_t)new_number * sizeof(struct shl_mem_alloc_debug_element_);
         
-        // Use regular realloc, as shl_mem_alloc may cause recursion
-        // Temporarily release mutex to avoid deadlock
-#ifdef SHL_MEM_DEBUG
-        MUTEX_UNLOCK();
-#endif
-        struct shl_mem_alloc_debug_element_ *new_elements = realloc(
-            shl_mem_alloc_debug_map.element, new_size);
-#ifdef SHL_MEM_DEBUG
-        MUTEX_LOCK();
-#endif
-        
+        struct shl_mem_alloc_debug_element_ *old_elements = shl_mem_alloc_debug_map.element;
+
+        struct shl_mem_alloc_debug_element_ *new_elements = malloc(new_size);
         if (new_elements == NULL) {
             shl_debug_error("Failed to grow allocation tracking table\n");
             return -1;
         }
         
+        // Copy old data to new memory
+        if (old_elements != NULL) {
+            memcpy(new_elements, old_elements, 
+                   element_number * sizeof(struct shl_mem_alloc_debug_element_));
+        }
+
         // Initialize new elements to zero
         memset(new_elements + element_number, 0, 
                (new_number - element_number) * sizeof(struct shl_mem_alloc_debug_element_));
         
         shl_mem_alloc_debug_map.element_number = new_number;
         shl_mem_alloc_debug_map.element = new_elements;
+        // Free old memory
+        free(old_elements);
     }
     
     // Add new element

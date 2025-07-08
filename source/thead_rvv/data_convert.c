@@ -18,6 +18,7 @@
 
 #include "rvv/rvv.h"
 #ifdef XTHEADVDOT
+#pragma message ("+++-WARNING: Compile with XTHEADVDOT")
 int shl_rvv_data_convert_init(struct csinn_tensor *input, struct csinn_tensor *output,
                               struct csinn_siso_params *params)
 {

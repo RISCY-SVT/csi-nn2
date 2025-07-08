@@ -23,8 +23,72 @@
 #endif
 #include "csinn/csi_nn.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @defgroup multithread Multi-threading Support Functions
+ * @{
+ */
+
+/**
+ * @brief Set the number of threads for parallel execution
+ * 
+ * @param threads Number of threads to use (must be >= 1)
+ * 
+ * @note If OpenMP is not available, this function will issue a warning
+ * @note If threads exceeds available processors, a debug message will be printed
+ * 
+ * @thread_safety This function is thread-safe. Multiple threads can call it
+ *                simultaneously, but the behavior is serialized internally.
+ *                It's recommended to call this function from a single thread
+ *                before starting parallel computations.
+ */
 void shl_multithread_set_threads(int threads);
 
+/**
+ * @brief Get the current number of threads configured
+ * 
+ * @return Current thread count (always returns 1 if OpenMP is not available)
+ * 
+ * @thread_safety This function is thread-safe and can be called from any thread.
+ */
+int shl_multithread_get_threads();
+
+/**
+ * @brief Check if multithreading is enabled
+ * 
+ * @return CSINN_TRUE if more than 1 thread is configured, CSINN_FALSE otherwise
+ * 
+ * @thread_safety This function is thread-safe and can be called from any thread.
+ */
 int shl_multithread_is_enable();
+
+/**
+ * @brief Get the maximum number of threads available on the system
+ * 
+ * @return Maximum thread count (number of processors)
+ * 
+ * @thread_safety This function is thread-safe and can be called from any thread.
+ */
+int shl_multithread_get_max_threads();
+
+/**
+ * @brief Synchronization barrier for all threads
+ * 
+ * @note This function only has effect when called from within an OpenMP
+ *       parallel region. Outside of parallel regions, it's a no-op.
+ * 
+ * @thread_safety This function must only be called from within OpenMP parallel
+ *                regions where it's designed to synchronize threads.
+ */
+void shl_multithread_sync();
+
+/** @} */ // end of multithread group
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // INCLUDE_SHL_MULTITHREAD_H_

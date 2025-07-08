@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-LICHEEPI_IP=${1:-"192.168.1.100"}  # Default IP, can be overridden
+LICHEEPI_IP=${1:-"192.168.1.44"}  # Default IP, can be overridden
 LICHEEPI_USER="root"
 REMOTE_DIR="/tmp/csi_nn2_tests"
 TEST_BINARY="test_memory"
