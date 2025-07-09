@@ -1,10 +1,13 @@
-LIB_DIR = ../../rvv_build
-INCLUDE = -I../../include -I../utils
-CFLAGS = -O0 -g3 -static
-CFLAGS += -march=rv64gcv_zfh_xtheadc_xtheadvdot -mabi=lp64d
-CFLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections
-CFLAGS += -DCSINN_API=15
-LIB_NAME = shl_rvv
+INSTALL_DIR=../../install_nn2/c920
+INCLUDE_DIR=../../include
+LIB_DIR = $(INSTALL_DIR)/lib
+INCLUDE = -I./ -I$(INSTALL_DIR)/include -I$(INSTALL_DIR)/include/csinn -I$(INSTALL_DIR)/include/backend -I$(INSTALL_DIR)/include/graph
+INCLUDE += -I../utils
+CFLAGS += -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c920
+CFLAGS += -ffunction-sections -fdata-sections -Wl,--gc-sections -fopenmp
+CFLAGS += -DSHL_BUILD_C920V2 -DSHL_BUILD_REF -DSHL_BUILD_GREF -DSHL_BUILD_RVV -DRISCV_TEST
+LIB_NAME = shl_c920
+LDFLAGS += -L../../install_nn2/c920/lib -lshl_ref -lm
 CC = riscv64-unknown-linux-gnu-gcc
 
 

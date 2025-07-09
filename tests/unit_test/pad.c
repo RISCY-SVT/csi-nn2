@@ -49,7 +49,7 @@ int main(int argc, char **argv)
                CSINN_DTYPE_FLOAT32);
     verify_pad(pad_fp16_in, pad_fp16_out, shl_rvv_pad_input_fp16, 3, 4, 19, 1, 1, 1, 1,
                CSINN_DTYPE_FLOAT16);
-    verify_pad(pad_int8_in, pad_int8_out, shl_rvv_pad_input_int8, 3, 4, 19, 1, 1, 1, 1,
+    verify_pad(pad_int8_in, pad_int8_out, (void (*)())shl_rvv_pad_input_int8, 3, 4, 19, 1, 1, 1, 1,
                CSINN_DTYPE_INT8);
 
     return done_testing();

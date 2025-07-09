@@ -275,11 +275,9 @@ void result_verify_8(float *reference, struct csinn_tensor *output, int8_t *inpu
 
     for (i = 0; i < size; i++) {
         if (output->dtype == CSINN_DTYPE_UINT8) {
-            output_tmp[i] =
-                shl_ref_dequantize_u8_to_f32(*((uint8_t *)output_data + i), output->qinfo);
+            output_tmp[i] = shl_ref_dequantize_u8_to_f32(*((uint8_t *)output_data + i), output->qinfo);
         } else if (output->dtype == CSINN_DTYPE_INT8) {
-            output_tmp[i] =
-                shl_ref_dequantize_i8_to_f32(*((int8_t *)output_data + i), output->qinfo);
+            output_tmp[i] = shl_ref_dequantize_i8_to_f32(*((int8_t *)output_data + i), output->qinfo);
         }
         if (isinf(reference[i]) || isnan(reference[i])) {
             error = 0;

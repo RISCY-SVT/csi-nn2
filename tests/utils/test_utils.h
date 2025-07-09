@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "shl_ref.h"
+#include "reference/ref.h"
 
 #ifdef __cplusplus
 extern "C" {
