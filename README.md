@@ -1,4 +1,4 @@
-English | [简体中文](./README_CN.md)
+# IMPORTANT: This library is optimized and tested for C920 ONLY!!!
 
 SHL(Structure of Heterogeneous Library, Chinese name: ShiHulan) is a high-performance Heterogeneous computing library provided by XuanTie.
 The interface of SHL uses XuanTie neural network library API for XuanTie CPU platform: CSI-NN2, and provides a series of optimized binary libraries.
