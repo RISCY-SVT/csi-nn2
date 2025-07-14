@@ -89,7 +89,7 @@ static int shl_c906_conv_im2col_sgemm_base(struct csinn_tensor *input, struct cs
                             } else {
                                 int in_col = -pad_left + kw * dilation_w;
                                 for (int ow1 = 0; ow1 < out_width; ow1++) {
-                                    int col_idx = (c * out_height + oh) * out_width + ow1;
+                                    // int col_idx = (c * out_height + oh) * out_width + ow1;
                                     if (in_col < in_width && in_col >= 0) {
                                         *data_col++ = channel_data[in_row * in_width + in_col];
                                     } else {

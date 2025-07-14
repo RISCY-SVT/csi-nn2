@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-#ifdef INCLUDE_SHL_REF_H_
-#warning "###-WARNING: include/shl_public/shl_ref.h already included. function declarations from this file will be ignored. Choose one header file to include in your code and remove the other one. -###"
-#endif
+// #ifdef INCLUDE_SHL_REF_H_
+// #warning "###-WARNING: include/shl_public/shl_ref.h already included. function declarations from this file will be ignored. Choose one header file to include in your code and remove the other one. -###"
+// #endif
 
 #ifndef INCLUDE_SHL_REF_H_
 #define INCLUDE_SHL_REF_H_

@@ -440,6 +440,7 @@ void shl_rvv_reorder_input_z8_fp32(float *b, float *sb, int k, int n, int ldx)
     int32_t vl = vsetvl_e32m2(8);
     float *b0 = NULL;
     int i = 0;
+    /* -------- main loop over complete blocks of 8 columns -------- */
     for (; i + 7 < n; i += 8) {
         b0 = b + i;
         for (int j = 0; j < k; j++) {
@@ -450,16 +451,19 @@ void shl_rvv_reorder_input_z8_fp32(float *b, float *sb, int k, int n, int ldx)
         }
     }
 
+    /* -------- handle remaining columns one by one -------- */
     for (; i < n; i++) {
         vl = vsetvl_e32m2(8);
         b0 = b + i;
         int j = 0;
+        // Process complete blocks of 8 rows
         for (; j + 7 < k; j += 8) {
             vfloat32m2_t _tmp = vlse32_v_f32m2(b0, ldx * sizeof(float), vl);
             b0 += 8 * ldx;
             vse32_v_f32m2(sb, _tmp, vl);
             sb += 8;
         }
+        // Handle remaining rows
         if (j < k) {
             vl = vsetvl_e32m2(k & 7);
             vfloat32m2_t _tmp = vlse32_v_f32m2(b0, ldx * sizeof(float), vl);

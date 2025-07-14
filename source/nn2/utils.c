@@ -21,6 +21,12 @@
 #include "csi_nn.h"
 #include "shl_utils.h"
 
+#ifndef SHL_BUILD_RTOS
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 199309L
+#endif
+#endif
+
 static struct csinn_enum_map csinn_dtype_map[] = {
     {CSINN_DTYPE_BOOL, "CSINN_DTYPE_BOOL"},       {CSINN_DTYPE_INT4, "CSINN_DTYPE_INT4"},
     {CSINN_DTYPE_UINT8, "CSINN_DTYPE_UINT8"},     {CSINN_DTYPE_INT8, "CSINN_DTYPE_INT8"},

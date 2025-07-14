@@ -1124,7 +1124,10 @@ void shl_rvv_diso_op_requantize_fp16(struct csinn_tensor *input0, struct csinn_t
 void shl_rvv_requantize(int32_t *src, int32_t multiplier, int32_t shift, int channel_size);
 
 void shl_rvv_dequantize_i8_to_f16(int8_t *src, __fp16 *dst, int size, int32_t zp, float scale);
+
+#if __riscv_vector
 vfloat16m2_t shl_rvv_vdeq_vv_f16m2(vint8m1_t _i8, vint8m1_t _z, vfloat16m2_t _s, int vl);
+#endif  // __riscv_vector
 
 void shl_rvv_reorder_kernel_n8_fp16_w_int8(int8_t *a, int8_t *sa, int m, int k, int ldx);
 
