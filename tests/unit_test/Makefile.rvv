@@ -25,7 +25,26 @@ test_objs += fullyconnected.o
 test_objs += gemm.o
 test_objs += conv2d_1x1s1_gemm.o
 test_objs += conv2d_im2col_gemm.o
+test_objs += conv2d_im2col_gemm_debug.o
+test_objs += conv2d_minimal_test.o
 test_objs += conv2d_winograd.o
+test_objs += check_data_alignment.o
+test_objs += conv2d_test_with_c920_api.o
+test_objs += check_conv2d_functions.o
+test_objs += conv2d_im2col_gemm_fixed.o
+test_objs += conv2d_proper_init_test.o
+test_objs += test_layout_and_params.o
+test_objs += test_kernel_order.o
+test_objs += conv2d_im2col_gemm_corrected.o
+test_objs += debug_reorder_behavior.o
+test_objs += analyze_compute_function.o
+test_objs += test_other_conv_methods.o
+test_objs += gemm_tail_n_fp32_fp16.o
+test_objs += test_rvv_tail_patterns.o
+test_objs += test_debug_gemm_n3.o
+test_objs += test_correct_gemm_logic.o
+test_objs += test_correct_reorder_gemm_pair.o
+test_objs += test_gemm_fp32_tail.o
 
 utils_objs =
 

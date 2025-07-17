@@ -1,0 +1,1097 @@
+CSI-NN2 GEMM Tail Test
+======================
+Test started at: Wed Jul 16 16:52:52 2025
+Testing GEMM tail cases (n % 8 != 0) with seed=123
+VLEN=128 bits
+[33m
+--- Testing: Minimal 1x1x1 no bias ---
+[0m
+  Debug info for FP32 GEMM m=1 n=1 k=1 bias=no:
+  A (kernel) sample [1x1]:
+    -0.4399 
+  B (input) sample [1x1]:
+     0.2883 
+  C_ref sample [1x1]:
+    -0.1268 
+  C_out sample [1x1]:
+    -0.1268 
+[32m  FP32: PASSED
+[0m[GEMM_FP16] Call 1: m=1, k=1, n=1, ldc=1
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Minimal 1x1x1 with bias ---
+[0m
+  Debug info for FP32 GEMM m=1 n=1 k=1 bias=yes:
+  A (kernel) sample [1x1]:
+    -0.1384 
+  B (input) sample [1x1]:
+    -0.3654 
+  Bias: -0.1240 
+  C_ref sample [1x1]:
+    -0.0735 
+  C_out sample [1x1]:
+    -0.0735 
+[32m  FP32: PASSED
+[0m[GEMM_FP16] Call 2: m=1, k=1, n=1, ldc=1
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Single output column, m=1 ---
+[0m[32m  FP32: PASSED
+[0m[GEMM_FP16] Call 3: m=1, k=7, n=1, ldc=1
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Single output column, m=4 ---
+[0m[32m  FP32: PASSED
+[0m[GEMM_FP16] Call 4: m=4, k=13, n=1, ldc=1
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Single output column, m=8 ---
+[0m[32m  FP32: PASSED
+[0m[GEMM_FP16] Call 5: m=8, k=27, n=1, ldc=1
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=2 (quarter tile) ---
+[0m[31mERROR in FP32 GEMM m=2 n=2 k=7 bias=yes:
+[0m  [0,0]: out=0.049846 ref=0.340942 diff=2.910957e-01
+  [0,1]: out=0.388852 ref=0.621341 diff=2.324885e-01
+  [1,0]: out=0.401722 ref=-0.082808 diff=4.845293e-01
+  [1,1]: out=-0.045001 ref=-0.154923 diff=1.099221e-01
+  Total errors: 4/4 (100.00%)
+  Max diff: 4.845293e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.564993 (threshold: 0.9999)
+  KL divergence: 7.517296e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: 3d4c2b4e 3ec717a9 
+  Reference row 0 hex: 3eae8fe8 3f1f1032 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[GEMM_FP16] Call 6: m=2, k=7, n=2, ldc=2
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=3 ---
+[0m[31mERROR in FP32 GEMM m=4 n=3 k=13 bias=no:
+[0m  [0,0]: out=-0.319810 ref=-0.113019 diff=2.067905e-01
+  [0,1]: out=-0.421739 ref=-0.269461 diff=1.522778e-01
+  [1,0]: out=-0.086800 ref=0.624564 diff=7.113645e-01
+  [1,1]: out=0.245019 ref=-0.062767 diff=3.077867e-01
+  [2,0]: out=-0.458927 ref=0.777929 diff=1.236857e+00
+  [2,1]: out=0.569976 ref=0.579970 diff=9.994268e-03
+  [3,0]: out=-0.299768 ref=0.015575 diff=3.153428e-01
+  [3,1]: out=-0.345396 ref=0.036949 diff=3.823449e-01
+  Total errors: 8/12 (66.67%)
+  Max diff: 1.236857e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.401596 (threshold: 0.9999)
+  KL divergence: 1.742006e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bea3be13 bed7ee2b 3dfab069 
+  Reference row 0 hex: bde77689 be89f6d1 3dfab069 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[GEMM_FP16] Call 7: m=4, k=13, n=3, ldc=3
+[31mERROR in FP16 GEMM m=4 n=3 k=13 bias=no:
+[0m  [0,0]: out=0.293701 ref=-0.113098 diff=4.067993e-01
+  [0,1]: out=0.084106 ref=0.107483 diff=2.337646e-02
+  [0,2]: out=-0.426025 ref=0.446045 diff=8.720703e-01
+  [1,0]: out=0.006134 ref=0.697266 diff=6.911316e-01
+  [1,1]: out=0.167236 ref=0.275391 diff=1.081543e-01
+  [1,2]: out=0.274414 ref=-0.293213 diff=5.676270e-01
+  [2,0]: out=0.159546 ref=-0.000593 diff=1.601391e-01
+  [2,1]: out=-0.327881 ref=0.137573 diff=4.654541e-01
+  [2,2]: out=0.143188 ref=-0.016052 diff=1.592407e-01
+  [3,0]: out=-0.045776 ref=-0.311768 diff=2.659912e-01
+  Total errors: 12/12 (100.00%)
+  Max diff: 8.720703e-01 (threshold: 1.000000e-02)
+  Cosine similarity: -0.417694 (threshold: 0.9999)
+  KL divergence: 1.872689e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 34b3 2d62 b6d1 
+  Reference row 0 hex: af3d 2ee1 3723 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=4 (half tile) ---
+[0m[31mERROR in FP32 GEMM m=8 n=4 k=27 bias=yes:
+[0m  [0,0]: out=-0.150525 ref=-0.799522 diff=6.489968e-01
+  [0,1]: out=-0.625960 ref=-1.305089 diff=6.791292e-01
+  [0,2]: out=0.055785 ref=0.058207 diff=2.421331e-03
+  [0,3]: out=-0.946897 ref=-0.524917 diff=4.219798e-01
+  [1,0]: out=-0.486912 ref=-0.141052 diff=3.458605e-01
+  [1,1]: out=-0.018025 ref=-0.524563 diff=5.065376e-01
+  [1,2]: out=-0.888557 ref=-0.156539 diff=7.320182e-01
+  [1,3]: out=-0.227523 ref=-0.117266 diff=1.102565e-01
+  [2,0]: out=0.946781 ref=0.932340 diff=1.444024e-02
+  [2,1]: out=0.843457 ref=0.737727 diff=1.057295e-01
+  Total errors: 32/32 (100.00%)
+  Max diff: 1.624086e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.450377 (threshold: 0.9999)
+  KL divergence: 3.461834e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: be1a2355 bf203eef 3d647f2d bf7267dc 
+  Reference row 0 hex: bf4cad7c bfa70d2c 3d6e6a20 bf0660fe 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[GEMM_FP16] Call 8: m=8, k=27, n=4, ldc=4
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=5 ---
+[0m[31mERROR in FP32 GEMM m=12 n=5 k=55 bias=no:
+[0m  [0,0]: out=-0.181207 ref=0.271228 diff=4.524354e-01
+  [0,1]: out=-0.440906 ref=-0.054391 diff=3.865157e-01
+  [0,2]: out=-0.710870 ref=-1.037125 diff=3.262551e-01
+  [0,3]: out=-0.061334 ref=-0.192803 diff=1.314687e-01
+  [1,0]: out=0.042050 ref=-0.479768 diff=5.218187e-01
+  [1,1]: out=0.005283 ref=0.450968 diff=4.456846e-01
+  [1,2]: out=0.902315 ref=0.350259 diff=5.520565e-01
+  [1,3]: out=0.553045 ref=-0.251410 diff=8.044550e-01
+  [2,0]: out=0.017591 ref=0.203142 diff=1.855505e-01
+  [2,1]: out=-0.827656 ref=-0.526182 diff=3.014740e-01
+  Total errors: 48/60 (80.00%)
+  Max diff: 1.808982e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.224838 (threshold: 0.9999)
+  KL divergence: 4.846331e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: be398e51 bee1be77 bf35fb8d bd7b39a5 3d1d2f58 
+  Reference row 0 hex: 3e8ade74 bd5ec896 bf84c081 be456e27 3d1d2f58 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[GEMM_FP16] Call 9: m=12, k=55, n=5, ldc=5
+[31mERROR in FP16 GEMM m=12 n=5 k=55 bias=no:
+[0m  [0,0]: out=0.448730 ref=-0.972656 diff=1.421387e+00
+  [0,1]: out=-0.596191 ref=-0.368408 diff=2.277832e-01
+  [0,2]: out=-0.416992 ref=-0.490479 diff=7.348633e-02
+  [0,3]: out=0.101624 ref=0.692871 diff=5.912476e-01
+  [0,4]: out=0.055359 ref=1.193359 diff=1.138000e+00
+  [1,0]: out=0.685547 ref=0.435303 diff=2.502441e-01
+  [1,1]: out=0.248169 ref=0.225342 diff=2.282715e-02
+  [1,2]: out=0.457275 ref=0.995605 diff=5.383301e-01
+  [1,3]: out=-0.369385 ref=-0.347168 diff=2.221680e-02
+  [1,4]: out=-0.534668 ref=-0.602051 diff=6.738281e-02
+  Total errors: 60/60 (100.00%)
+  Max diff: 1.917969e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.229877 (threshold: 0.9999)
+  KL divergence: 3.469528e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 372e b8c5 b6ac 2e81 2b16 
+  Reference row 0 hex: bbc8 b5e5 b7d9 398b 3cc6 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=6 ---
+[0m[31mERROR in FP32 GEMM m=1 n=6 k=13 bias=yes:
+[0m  [0,0]: out=0.533281 ref=-0.006759 diff=5.400399e-01
+  [0,1]: out=0.509256 ref=0.493177 diff=1.607826e-02
+  [0,2]: out=0.671522 ref=0.532224 diff=1.392989e-01
+  [0,3]: out=0.711725 ref=-0.002595 diff=7.143201e-01
+  [0,4]: out=0.152609 ref=0.521491 diff=3.688824e-01
+  [0,5]: out=0.297374 ref=0.710914 diff=4.135396e-01
+  Total errors: 6/6 (100.00%)
+  Max diff: 7.143201e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.616528 (threshold: 0.9999)
+  KL divergence: 1.008492e+00 (threshold: 1.000000e-04)
+  Output row 0 hex: 3f088515 3f025e92 3f2be8e6 3f3633a1 3e1c457a 3e984168 
+  Reference row 0 hex: bbdd7c40 3efc81bb 3f083fcf bb2a0d80 3f058073 3f35fe6f 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[GEMM_FP16] Call 10: m=1, k=13, n=6, ldc=6
+[31mERROR in FP16 GEMM m=1 n=6 k=13 bias=yes:
+[0m  [0,0]: out=0.143066 ref=0.267334 diff=1.242676e-01
+  [0,1]: out=-0.689941 ref=0.040497 diff=7.304382e-01
+  [0,2]: out=-0.402344 ref=-0.052216 diff=3.501282e-01
+  [0,3]: out=-0.216553 ref=0.191895 diff=4.084473e-01
+  [0,4]: out=-0.238770 ref=0.076477 diff=3.152466e-01
+  [0,5]: out=-0.508301 ref=-0.093079 diff=4.152222e-01
+  Total errors: 6/6 (100.00%)
+  Max diff: 7.304382e-01 (threshold: 1.000000e-02)
+  Cosine similarity: 0.052213 (threshold: 0.9999)
+  KL divergence: 6.415477e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3094 b985 b670 b2ee b3a4 b811 
+  Reference row 0 hex: 3447 292f aaaf 3224 2ce5 adf5 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=7 (almost full tile) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=27 bias=no:
+[0m  [0,0]: out=0.126380 ref=0.184804 diff=5.842432e-02
+  [0,1]: out=0.590956 ref=0.535822 diff=5.513418e-02
+  [0,2]: out=0.256079 ref=-0.170239 diff=4.263178e-01
+  [0,3]: out=-0.020485 ref=-0.114892 diff=9.440710e-02
+  [0,4]: out=-0.168781 ref=-0.449334 diff=2.805533e-01
+  [0,5]: out=-0.211885 ref=0.157664 diff=3.695489e-01
+  [1,0]: out=-0.017440 ref=-0.395094 diff=3.776543e-01
+  [1,1]: out=-0.415736 ref=-0.161107 diff=2.546289e-01
+  [1,2]: out=-0.131594 ref=0.219175 diff=3.507689e-01
+  [1,3]: out=0.281430 ref=-0.085814 diff=3.672436e-01
+  Total errors: 48/56 (85.71%)
+  Max diff: 1.669117e+00 (threshold: 1.000000e-04)
+  Cosine similarity: -0.071968 (threshold: 0.9999)
+  KL divergence: 1.688349e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3e0169ba 3f1748e8 3e831cbe bca7cfb9 be2cd4dc be58f879 3e64ff72 
+  Reference row 0 hex: 3e3d3d50 3f092ba2 be2e5329 bdeb4c70 bee60f1e 3e21728f 3e64ff72 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=27 bias=no:
+[0m  [0,0]: out=-0.158081 ref=-0.452637 diff=2.945557e-01
+  [0,1]: out=-0.274902 ref=0.728027 diff=1.002930e+00
+  [0,2]: out=-0.184326 ref=-0.133301 diff=5.102539e-02
+  [0,3]: out=-0.168945 ref=0.329346 diff=4.982910e-01
+  [0,4]: out=0.485352 ref=0.214844 diff=2.705078e-01
+  [0,5]: out=0.588379 ref=-0.273682 diff=8.620605e-01
+  [0,6]: out=0.021606 ref=0.351074 diff=3.294678e-01
+  [1,0]: out=-0.170044 ref=-1.107422 diff=9.373779e-01
+  [1,1]: out=-0.014465 ref=0.595703 diff=6.101685e-01
+  [1,2]: out=0.297119 ref=-0.282715 diff=5.798340e-01
+  Total errors: 56/56 (100.00%)
+  Max diff: 1.557617e+00 (threshold: 1.000000e-02)
+  Cosine similarity: -0.263641 (threshold: 0.9999)
+  KL divergence: 1.316585e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: b10f b466 b1e6 b168 37c4 38b5 2588 
+  Reference row 0 hex: b73e 39d3 b044 3545 32e0 b461 359e 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=8 (exactly one tile) ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=9 (one tile + 1) ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=10 ---
+[0m[31mERROR in FP32 GEMM m=4 n=10 k=13 bias=yes:
+[0m  [0,8]: out=0.531105 ref=-0.180009 diff=7.111135e-01
+  [0,9]: out=0.437711 ref=0.150018 diff=2.876926e-01
+  [1,8]: out=-0.130799 ref=-0.163158 diff=3.235921e-02
+  [1,9]: out=-0.497238 ref=-0.090022 diff=4.072163e-01
+  [2,8]: out=0.271880 ref=-0.369267 diff=6.411475e-01
+  [2,9]: out=0.480485 ref=0.296372 diff=1.841125e-01
+  [3,8]: out=-0.203873 ref=0.542125 diff=7.459976e-01
+  [3,9]: out=0.805651 ref=-0.483377 diff=1.289028e+00
+  Total errors: 8/40 (20.00%)
+  Max diff: 1.289028e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.793543 (threshold: 0.9999)
+  KL divergence: 5.563279e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: 3f0a691c 3e17e36b 3f2de8f3 3f1833ae 3e8f3b36 3f246051 3e9b25fa 3e6e0dd3 ...
+  Reference row 0 hex: 3f0a691c 3e17e36b 3f2de8f3 3f1833ae 3e8f3b36 3f246051 3e9b25fb 3e6e0dd4 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=11 ---
+[0m[31mERROR in FP32 GEMM m=8 n=11 k=27 bias=no:
+[0m  [0,8]: out=1.227196 ref=-0.421328 diff=1.648525e+00
+  [0,9]: out=-0.519677 ref=0.021404 diff=5.410815e-01
+  [1,8]: out=-0.206023 ref=-0.178460 diff=2.756332e-02
+  [1,9]: out=-0.291629 ref=-0.357183 diff=6.555417e-02
+  [2,8]: out=-0.070441 ref=0.697191 diff=7.676319e-01
+  [2,9]: out=-0.418588 ref=-0.217883 diff=2.007041e-01
+  [3,8]: out=-0.014846 ref=-0.709834 diff=6.949880e-01
+  [3,9]: out=-0.418855 ref=0.424808 diff=8.436630e-01
+  [4,8]: out=0.139142 ref=0.024763 diff=1.143789e-01
+  [4,9]: out=0.062045 ref=-0.588423 diff=6.504675e-01
+  Total errors: 16/88 (18.18%)
+  Max diff: 1.648525e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.808173 (threshold: 0.9999)
+  KL divergence: 7.036209e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bf19dd8e 3ebfaa25 bf25e213 bf3c7821 3f303581 3d1db7b1 3ee1a6d9 3d078a10 ...
+  Reference row 0 hex: bf19dd8e 3ebfaa25 bf25e213 bf3c7822 3f303581 3d1db7b0 3ee1a6da 3d078a0c ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=11 k=27 bias=no:
+[0m  [0,8]: out=-0.853516 ref=0.663086 diff=1.516602e+00
+  [0,9]: out=-0.110596 ref=-0.270752 diff=1.601562e-01
+  [0,10]: out=0.946777 ref=0.495117 diff=4.516602e-01
+  [1,8]: out=0.496338 ref=-0.737793 diff=1.234131e+00
+  [1,9]: out=-0.293945 ref=-1.121094 diff=8.271484e-01
+  [2,8]: out=0.911133 ref=0.103149 diff=8.079834e-01
+  [2,9]: out=-0.214600 ref=0.213745 diff=4.283447e-01
+  [2,10]: out=0.218750 ref=1.131836 diff=9.130859e-01
+  [3,8]: out=-0.511719 ref=0.366943 diff=8.786621e-01
+  [3,9]: out=0.084167 ref=0.266846 diff=1.826782e-01
+  Total errors: 22/88 (25.00%)
+  Max diff: 1.516602e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.513339 (threshold: 0.9999)
+  KL divergence: 6.856473e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: 39df 2e93 3691 36c9 345e 3aca b2a7 b060 bad4 af14 3b93 
+  Reference row 0 hex: 39df 2e92 3691 36c9 345d 3acb b2a5 b066 394e b455 37ec 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=13 ---
+[0m[31mERROR in FP32 GEMM m=12 n=13 k=55 bias=yes:
+[0m  [0,8]: out=0.095133 ref=-0.305441 diff=4.005743e-01
+  [0,9]: out=0.615656 ref=0.488699 diff=1.269565e-01
+  [0,10]: out=0.856397 ref=1.527733 diff=6.713358e-01
+  [0,11]: out=-0.265314 ref=0.830004 diff=1.095317e+00
+  [1,8]: out=-0.875666 ref=0.115966 diff=9.916316e-01
+  [1,9]: out=0.409490 ref=-0.230571 diff=6.400611e-01
+  [1,10]: out=-1.298923 ref=0.308305 diff=1.607228e+00
+  [1,11]: out=0.633862 ref=-0.525886 diff=1.159748e+00
+  [2,8]: out=0.677657 ref=-0.490552 diff=1.168208e+00
+  [2,9]: out=-0.168820 ref=-0.597880 diff=4.290605e-01
+  Total errors: 48/156 (30.77%)
+  Max diff: 2.521332e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.708809 (threshold: 0.9999)
+  KL divergence: 1.048125e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3dc9be4a 3fce2c8b be532c7d beaaa78b 3ec5192b 3f39610b 3f8efd4f 3f8739ce ...
+  Reference row 0 hex: 3dc9be4c 3fce2c8c be532c84 beaaa78a 3ec5192b 3f39610e 3f8efd4e 3f8739ce ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=12 n=13 k=55 bias=yes:
+[0m  [0,8]: out=0.263428 ref=-1.336914 diff=1.600342e+00
+  [0,9]: out=-0.180542 ref=-0.763672 diff=5.831299e-01
+  [0,10]: out=0.066040 ref=0.203369 diff=1.373291e-01
+  [0,11]: out=-0.133911 ref=-0.287842 diff=1.539307e-01
+  [0,12]: out=-0.542969 ref=-0.499023 diff=4.394531e-02
+  [1,8]: out=1.038086 ref=-0.628418 diff=1.666504e+00
+  [1,9]: out=-0.766113 ref=0.655273 diff=1.421387e+00
+  [1,10]: out=0.430664 ref=-0.189087 diff=6.197510e-01
+  [1,11]: out=-0.453613 ref=0.955566 diff=1.409180e+00
+  [1,12]: out=1.410156 ref=0.062164 diff=1.347992e+00
+  Total errors: 60/156 (38.46%)
+  Max diff: 2.055664e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.631526 (threshold: 0.9999)
+  KL divergence: 1.405972e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 36b6 2dd1 b254 b266 aeb5 3016 b062 3546 3437 b1c7 2c3a b049 b858 
+  Reference row 0 hex: 36b2 2dd4 b259 b268 aeae 3019 b060 3547 bd59 ba1c 3282 b49b b7fc 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=15 (almost two tiles) ---
+[0m[31mERROR in FP32 GEMM m=1 n=15 k=13 bias=no:
+[0m  [0,8]: out=0.250316 ref=0.386021 diff=1.357052e-01
+  [0,9]: out=-0.087326 ref=-0.447918 diff=3.605913e-01
+  [0,10]: out=-0.734013 ref=0.393794 diff=1.127807e+00
+  [0,11]: out=0.201210 ref=-0.021220 diff=2.224302e-01
+  [0,12]: out=-0.215798 ref=-0.323371 diff=1.075727e-01
+  [0,13]: out=-0.102830 ref=0.252505 diff=3.553346e-01
+  Total errors: 6/15 (40.00%)
+  Max diff: 1.127807e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.377892 (threshold: 0.9999)
+  KL divergence: 3.192084e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: be8f1861 be474c47 3d40c853 3d217bce 3e3f406e 3ebb5291 3db6ab7b 3eb3d178 ...
+  Reference row 0 hex: be8f1862 be474c42 3d40c854 3d217bd6 3e3f406d 3ebb528f 3db6ab7c 3eb3d176 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=1 n=15 k=13 bias=no:
+[0m  [0,8]: out=-0.448242 ref=-0.243774 diff=2.044678e-01
+  [0,9]: out=-0.027481 ref=0.096863 diff=1.243439e-01
+  [0,10]: out=0.044159 ref=0.113098 diff=6.893921e-02
+  [0,11]: out=0.039703 ref=-0.490234 diff=5.299377e-01
+  [0,12]: out=0.284668 ref=0.234619 diff=5.004883e-02
+  [0,13]: out=0.155640 ref=0.136475 diff=1.916504e-02
+  [0,14]: out=0.399902 ref=0.178223 diff=2.216797e-01
+  Total errors: 7/15 (46.67%)
+  Max diff: 5.299377e-01 (threshold: 1.000000e-02)
+  Cosine similarity: 0.785576 (threshold: 0.9999)
+  KL divergence: 3.306956e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: 3181 a9a1 a678 ac7a 302b 36d4 b76b 3087 b72c a709 29a7 2915 348e 30fb 3666 
+  Reference row 0 hex: 3181 a9a2 a67c ac7a 302a 36d5 b769 3087 b3cd 2e33 2f3d b7d8 3382 305e 31b4 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=16 (exactly one FP16 tile) ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=17 (two tiles + 1) ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: n=23 (two tiles + 7) ---
+[0m[31mERROR in FP32 GEMM m=4 n=23 k=13 bias=yes:
+[0m  [0,16]: out=-0.121412 ref=-0.332199 diff=2.107870e-01
+  [0,17]: out=-0.049809 ref=-0.607870 diff=5.580609e-01
+  [0,18]: out=-0.471753 ref=-0.262991 diff=2.087621e-01
+  [0,19]: out=-0.434857 ref=-0.449522 diff=1.466557e-02
+  [0,20]: out=-0.249318 ref=-0.274125 diff=2.480739e-02
+  [0,21]: out=-0.440405 ref=-0.506706 diff=6.630102e-02
+  [1,16]: out=0.659289 ref=0.137049 diff=5.222406e-01
+  [1,17]: out=0.406323 ref=0.217714 diff=1.886091e-01
+  [1,18]: out=0.699850 ref=0.423566 diff=2.762838e-01
+  [1,19]: out=1.271227 ref=0.301251 diff=9.699755e-01
+  Total errors: 24/92 (26.09%)
+  Max diff: 9.699755e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.897449 (threshold: 0.9999)
+  KL divergence: 7.047797e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bf6b44a7 be862051 bf22e1fd bf4fc7a2 bf1641b6 be7f9079 bf486179 be1e741f ...
+  Reference row 0 hex: bf6b44a5 be862051 bf22e1fd bf4fc7a1 bf1641b6 be7f907e bf48617a be1e7420 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=4 n=23 k=13 bias=yes:
+[0m  [0,16]: out=-0.010269 ref=-0.448730 diff=4.384613e-01
+  [0,17]: out=-0.225342 ref=0.259277 diff=4.846191e-01
+  [0,18]: out=-0.264893 ref=-0.465088 diff=2.001953e-01
+  [0,19]: out=-0.745117 ref=-0.578613 diff=1.665039e-01
+  [0,20]: out=-0.663086 ref=-1.303711 diff=6.406250e-01
+  [0,21]: out=-0.548340 ref=-0.059601 diff=4.887390e-01
+  [0,22]: out=-0.242554 ref=-0.079102 diff=1.634521e-01
+  [1,16]: out=0.982422 ref=1.282227 diff=2.998047e-01
+  [1,17]: out=0.646484 ref=0.598145 diff=4.833984e-02
+  [1,18]: out=0.633301 ref=0.823242 diff=1.899414e-01
+  Total errors: 28/92 (30.43%)
+  Max diff: 1.110596e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.922930 (threshold: 0.9999)
+  KL divergence: 5.232580e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bb2c bc3a b9cf bb2b bb4d b67c ba17 b367 ae1c b607 b4ed b636 b80b b7c2 b8f4 b3bc ...
+  Reference row 0 hex: bb2d bc3a b9ce bb29 bb4f b67d ba18 b367 ae1a b608 b4ed b634 b80b b7c2 b8f3 b3bc ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: n=31 (three tiles + 7) ---
+[0m[31mERROR in FP32 GEMM m=12 n=31 k=55 bias=no:
+[0m  [0,24]: out=0.144681 ref=-0.348649 diff=4.933300e-01
+  [0,25]: out=0.182318 ref=1.027368 diff=8.450509e-01
+  [0,26]: out=-0.648109 ref=0.632339 diff=1.280448e+00
+  [0,27]: out=-0.004339 ref=0.690357 diff=6.946962e-01
+  [0,28]: out=0.349792 ref=0.714740 diff=3.649481e-01
+  [0,29]: out=-0.120333 ref=-0.461230 diff=3.408972e-01
+  [1,24]: out=0.453468 ref=-0.089394 diff=5.428624e-01
+  [1,25]: out=0.017733 ref=0.296383 diff=2.786503e-01
+  [1,26]: out=-0.572778 ref=-0.738162 diff=1.653840e-01
+  [1,27]: out=1.343938 ref=-0.016777 diff=1.360715e+00
+  Total errors: 72/372 (19.35%)
+  Max diff: 2.776455e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.757925 (threshold: 0.9999)
+  KL divergence: 7.766470e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: be1cff21 bca700b7 3e448320 3f4de209 bf02d8f3 3f4097c8 3f8cf0f9 be117904 ...
+  Reference row 0 hex: be1cff20 bca700af 3e448326 3f4de209 bf02d8f3 3f4097c9 3f8cf0f9 be117905 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=12 n=31 k=55 bias=no:
+[0m  [0,24]: out=-0.805176 ref=0.225098 diff=1.030273e+00
+  [0,25]: out=0.659180 ref=-0.519043 diff=1.178223e+00
+  [0,26]: out=0.358154 ref=-0.417480 diff=7.756348e-01
+  [0,27]: out=0.696289 ref=-0.037323 diff=7.336121e-01
+  [0,28]: out=-0.281006 ref=0.918945 diff=1.199951e+00
+  [0,29]: out=-1.108398 ref=-0.049927 diff=1.058472e+00
+  [0,30]: out=0.883301 ref=-0.284668 diff=1.167969e+00
+  [1,24]: out=1.111328 ref=0.492432 diff=6.188965e-01
+  [1,25]: out=-0.901855 ref=1.582031 diff=2.483887e+00
+  [1,26]: out=0.265869 ref=-0.006611 diff=2.724800e-01
+  Total errors: 84/372 (22.58%)
+  Max diff: 2.483887e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.778221 (threshold: 0.9999)
+  KL divergence: 7.102546e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: b75e be02 b8d1 3a8d 372d 2c26 bab0 34a6 3600 3c3e 37fc b56b 3ce6 bc2f 3abc b894 ...
+  Reference row 0 hex: b760 be02 b8d1 3a8e 372a 2c28 bab1 34a7 35fd 3c3e 37fc b56c 3ce6 bc2d 3aba b894 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: m=1, n=7 (single row) ---
+[0m[31mERROR in FP32 GEMM m=1 n=7 k=13 bias=yes:
+[0m  [0,0]: out=0.694643 ref=-0.072209 diff=7.668521e-01
+  [0,1]: out=0.324771 ref=0.567294 diff=2.425237e-01
+  [0,2]: out=0.669694 ref=0.572776 diff=9.691828e-02
+  [0,3]: out=0.376767 ref=0.362825 diff=1.394206e-02
+  [0,4]: out=1.039286 ref=0.770421 diff=2.688651e-01
+  [0,5]: out=0.511559 ref=0.210731 diff=3.008287e-01
+  Total errors: 6/7 (85.71%)
+  Max diff: 7.668521e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.843835 (threshold: 0.9999)
+  KL divergence: 3.250165e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3f31d420 3ea64856 3f2b710e 3ec0e79b 3f850753 3f02f58e 3f08f486 
+  Reference row 0 hex: bd93e258 3f113a33 3f12a16b 3eb9c431 3f453a4e 3e57c9c6 3f08f484 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=1 n=7 k=13 bias=yes:
+[0m  [0,0]: out=0.548828 ref=-0.259766 diff=8.085938e-01
+  [0,1]: out=-0.395752 ref=0.102173 diff=4.979248e-01
+  [0,2]: out=0.352539 ref=0.777832 diff=4.252930e-01
+  [0,3]: out=-0.059784 ref=0.015869 diff=7.565308e-02
+  [0,4]: out=0.511230 ref=0.410889 diff=1.003418e-01
+  [0,5]: out=0.138184 ref=0.167603 diff=2.941895e-02
+  [0,6]: out=0.712891 ref=0.025589 diff=6.873016e-01
+  Total errors: 7/7 (100.00%)
+  Max diff: 8.085938e-01 (threshold: 1.000000e-02)
+  Cosine similarity: 0.310598 (threshold: 0.9999)
+  KL divergence: 4.576676e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3864 b655 35a4 aba7 3817 306c 39b4 
+  Reference row 0 hex: b428 2e8a 3a39 2410 3693 315d 268d 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: m=3, n=5 (partial m tile) ---
+[0m[31mERROR in FP32 GEMM m=3 n=5 k=27 bias=no:
+[0m  [0,0]: out=-0.954250 ref=-0.564240 diff=3.900102e-01
+  [0,1]: out=0.110521 ref=-0.371703 diff=4.822238e-01
+  [0,2]: out=-0.657274 ref=-0.001250 diff=6.560240e-01
+  [0,3]: out=0.025652 ref=0.422148 diff=3.964967e-01
+  [1,0]: out=0.227877 ref=0.337304 diff=1.094272e-01
+  [1,1]: out=-0.273846 ref=-0.233774 diff=4.007185e-02
+  [1,2]: out=-0.509532 ref=-0.298888 diff=2.106446e-01
+  [1,3]: out=-0.391864 ref=0.291465 diff=6.833295e-01
+  [2,0]: out=0.225620 ref=0.215217 diff=1.040271e-02
+  [2,1]: out=0.518987 ref=0.495554 diff=2.343231e-02
+  Total errors: 12/15 (80.00%)
+  Max diff: 6.833295e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.707251 (threshold: 0.9999)
+  KL divergence: 2.795164e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bf7449b9 3de258c1 bf284317 3cd22395 3ed84328 
+  Reference row 0 hex: bf107203 bebe4fdb baa3cc00 3ed823d7 3ed84328 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=3 n=5 k=27 bias=no:
+[0m  [0,0]: out=0.735840 ref=0.209961 diff=5.258789e-01
+  [0,1]: out=0.564941 ref=-0.223267 diff=7.882080e-01
+  [0,2]: out=-0.898438 ref=0.135620 diff=1.034058e+00
+  [0,3]: out=-0.552734 ref=0.010612 diff=5.633469e-01
+  [0,4]: out=-0.191040 ref=-0.311523 diff=1.204834e-01
+  [1,0]: out=0.161743 ref=-0.004040 diff=1.657829e-01
+  [1,1]: out=-0.751953 ref=0.026367 diff=7.783203e-01
+  [1,2]: out=-0.730469 ref=0.344971 diff=1.075439e+00
+  [1,3]: out=-0.029388 ref=0.061432 diff=9.082031e-02
+  [1,4]: out=0.447266 ref=0.318359 diff=1.289062e-01
+  Total errors: 15/15 (100.00%)
+  Max diff: 1.075439e+00 (threshold: 1.000000e-02)
+  Cosine similarity: -0.059821 (threshold: 0.9999)
+  KL divergence: 5.578778e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 39e3 3885 bb30 b86c b21d 
+  Reference row 0 hex: 32b8 b325 3057 216f b4fc 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: m=7, n=3 (partial m tile) ---
+[0m[31mERROR in FP32 GEMM m=7 n=3 k=55 bias=yes:
+[0m  [0,0]: out=-0.589876 ref=-0.086443 diff=5.034335e-01
+  [0,1]: out=0.228299 ref=0.145249 diff=8.304983e-02
+  [1,0]: out=0.871826 ref=0.268248 diff=6.035784e-01
+  [1,1]: out=-0.257963 ref=-0.143768 diff=1.141952e-01
+  [2,0]: out=-1.151691 ref=-1.028939 diff=1.227515e-01
+  [2,1]: out=-0.621643 ref=-0.471512 diff=1.501307e-01
+  [3,0]: out=-0.388118 ref=0.176622 diff=5.647395e-01
+  [3,1]: out=-0.157343 ref=0.200588 diff=3.579305e-01
+  [4,0]: out=0.958355 ref=0.273562 diff=6.847932e-01
+  [4,1]: out=-0.315848 ref=1.020500 diff=1.336349e+00
+  Total errors: 14/21 (66.67%)
+  Max diff: 1.336349e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.723424 (threshold: 0.9999)
+  KL divergence: 2.909425e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bf17021f 3e69c73f bdc0cc7a 
+  Reference row 0 hex: bdb108d4 3e14bc3b bdc0cc8c 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=7 n=3 k=55 bias=yes:
+[0m  [0,0]: out=-0.474854 ref=0.942871 diff=1.417725e+00
+  [0,1]: out=0.249512 ref=-0.234619 diff=4.841309e-01
+  [0,2]: out=0.184570 ref=-0.288574 diff=4.731445e-01
+  [1,0]: out=-0.000452 ref=0.184692 diff=1.851439e-01
+  [1,1]: out=0.372803 ref=0.014763 diff=3.580399e-01
+  [1,2]: out=0.564941 ref=-1.598633 diff=2.163574e+00
+  [2,0]: out=0.618164 ref=1.610352 diff=9.921875e-01
+  [2,1]: out=0.923340 ref=0.376465 diff=5.468750e-01
+  [2,2]: out=0.571289 ref=1.117188 diff=5.458984e-01
+  [3,0]: out=0.442139 ref=0.142334 diff=2.998047e-01
+  Total errors: 21/21 (100.00%)
+  Max diff: 2.238770e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.035560 (threshold: 0.9999)
+  KL divergence: 2.100265e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: b799 33fc 31e8 
+  Reference row 0 hex: 3b8b b382 b49e 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: m=9, n=11 (m and n both have tails) ---
+[0m[31mERROR in FP32 GEMM m=9 n=11 k=13 bias=no:
+[0m  [0,8]: out=0.105516 ref=0.896451 diff=7.909347e-01
+  [0,9]: out=-0.026806 ref=-0.267989 diff=2.411835e-01
+  [1,8]: out=-0.118017 ref=-0.592848 diff=4.748309e-01
+  [1,9]: out=0.161050 ref=-0.535958 diff=6.970081e-01
+  [2,8]: out=-0.176639 ref=-0.051436 diff=1.252033e-01
+  [2,9]: out=0.049991 ref=-0.046647 diff=9.663744e-02
+  [3,8]: out=-0.064044 ref=-0.575011 diff=5.109670e-01
+  [3,9]: out=-0.073153 ref=-0.188857 diff=1.157037e-01
+  [4,8]: out=-0.495911 ref=0.032522 diff=5.284328e-01
+  [4,9]: out=0.123958 ref=0.156468 diff=3.250984e-02
+  Total errors: 18/99 (18.18%)
+  Max diff: 7.909347e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.863145 (threshold: 0.9999)
+  KL divergence: 2.078833e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bf4105d5 3e0ca576 3f366a7b bf050813 bf2d675a 3d392eac 3e8b9da4 bd17186a ...
+  Reference row 0 hex: bf4105d5 3e0ca577 3f366a7a bf050814 bf2d675b 3d392ead 3e8b9da4 bd171864 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=9 n=11 k=13 bias=no:
+[0m  [0,9]: out=0.183105 ref=-0.334229 diff=5.173340e-01
+  [0,10]: out=-0.044800 ref=-0.058716 diff=1.391602e-02
+  [1,8]: out=0.382812 ref=-0.052185 diff=4.349976e-01
+  [1,9]: out=-0.051758 ref=-0.688477 diff=6.367188e-01
+  [1,10]: out=0.531250 ref=0.165894 diff=3.653564e-01
+  [2,8]: out=0.276611 ref=0.097839 diff=1.787720e-01
+  [2,9]: out=0.292969 ref=0.346924 diff=5.395508e-02
+  [2,10]: out=0.134399 ref=-0.209229 diff=3.436279e-01
+  [3,8]: out=-0.105469 ref=-0.198608 diff=9.313965e-02
+  [3,9]: out=0.090942 ref=-0.429199 diff=5.201416e-01
+  Total errors: 26/99 (26.26%)
+  Max diff: 8.355942e-01 (threshold: 1.000000e-02)
+  Cosine similarity: 0.749790 (threshold: 0.9999)
+  KL divergence: 6.899695e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: abb3 2f92 2a73 3441 abd9 b720 3569 b37a 3731 31dc a9bc 
+  Reference row 0 hex: abb2 2f94 2a75 3442 abe0 b720 3569 b37a 3742 b559 ab84 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: m=15, n=13 (larger tails) ---
+[0m[31mERROR in FP32 GEMM m=15 n=13 k=27 bias=yes:
+[0m  [0,8]: out=0.274164 ref=0.704440 diff=4.302764e-01
+  [0,9]: out=0.429970 ref=-0.572436 diff=1.002405e+00
+  [0,10]: out=-0.120649 ref=0.906511 diff=1.027160e+00
+  [0,11]: out=0.345761 ref=0.212077 diff=1.336841e-01
+  [1,8]: out=-0.078406 ref=-0.145433 diff=6.702670e-02
+  [1,9]: out=0.516176 ref=-0.105038 diff=6.212144e-01
+  [1,10]: out=0.363260 ref=0.005123 diff=3.581372e-01
+  [1,11]: out=0.671496 ref=0.272846 diff=3.986503e-01
+  [2,8]: out=0.075324 ref=-0.445189 diff=5.205128e-01
+  [2,9]: out=-0.699288 ref=-0.748494 diff=4.920572e-02
+  Total errors: 60/195 (30.77%)
+  Max diff: 1.546925e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.715635 (threshold: 0.9999)
+  KL divergence: 1.019559e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: be9a1704 3cb29205 3f0823aa 3ed0d226 3da9d7e8 3e31be08 3ee95e40 3dc6f8bc ...
+  Reference row 0 hex: be9a1702 3cb29220 3f0823aa 3ed0d228 3da9d7f0 3e31be10 3ee95e3f 3dc6f8c4 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=15 n=13 k=27 bias=yes:
+[0m  [0,8]: out=0.303223 ref=-0.058289 diff=3.615112e-01
+  [0,9]: out=0.094543 ref=-0.194580 diff=2.891235e-01
+  [0,10]: out=-0.418457 ref=0.443604 diff=8.620605e-01
+  [0,11]: out=0.655762 ref=0.484131 diff=1.716309e-01
+  [0,12]: out=-0.805664 ref=0.549316 diff=1.354980e+00
+  [1,8]: out=0.635742 ref=0.429199 diff=2.065430e-01
+  [1,9]: out=0.911621 ref=0.280762 diff=6.308594e-01
+  [1,10]: out=0.624512 ref=0.243164 diff=3.813477e-01
+  [1,11]: out=0.310059 ref=-0.193970 diff=5.040283e-01
+  [1,12]: out=0.135742 ref=0.838867 diff=7.031250e-01
+  Total errors: 74/195 (37.95%)
+  Max diff: 1.417725e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.797341 (threshold: 0.9999)
+  KL divergence: 4.096555e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: b0e6 b4eb 3532 3846 3c21 31ab ba0c 32a8 34da 2e0d b6b2 393f ba72 
+  Reference row 0 hex: b0e8 b4ea 3532 3846 3c21 31aa ba0c 32a9 ab76 b23a 3719 37bf 3865 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: k=1 (minimal reduction) ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: k=8 (one k-block) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=8 bias=yes:
+[0m  [0,0]: out=-0.417551 ref=-0.370309 diff=4.724211e-02
+  [0,1]: out=0.029740 ref=-0.083009 diff=1.127485e-01
+  [0,2]: out=-0.149681 ref=-0.256020 diff=1.063393e-01
+  [0,3]: out=-0.240895 ref=-0.144894 diff=9.600157e-02
+  [0,4]: out=-0.400134 ref=0.197402 diff=5.975363e-01
+  [0,5]: out=-0.101419 ref=0.255588 diff=3.570070e-01
+  [1,0]: out=-0.081486 ref=0.309489 diff=3.909751e-01
+  [1,1]: out=-0.266027 ref=-0.092215 diff=1.738115e-01
+  [1,2]: out=0.370694 ref=-0.441197 diff=8.118907e-01
+  [1,3]: out=-0.133324 ref=-0.578440 diff=4.451163e-01
+  Total errors: 48/56 (85.71%)
+  Max diff: 9.721627e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.623319 (threshold: 0.9999)
+  KL divergence: 1.122251e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bed5c93e 3cf3a148 be1945e2 be76ad47 beccde6a bdcfb4de be2d3fe7 
+  Reference row 0 hex: bebd9920 bdaa0063 be83150c be145f0b 3e4a23b8 3e82dc66 be2d3fe7 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=8 bias=yes:
+[0m  [0,0]: out=0.517578 ref=0.070862 diff=4.467163e-01
+  [0,1]: out=0.261230 ref=0.288818 diff=2.758789e-02
+  [0,2]: out=0.402832 ref=0.097290 diff=3.055420e-01
+  [0,3]: out=0.414551 ref=0.458740 diff=4.418945e-02
+  [0,4]: out=0.416992 ref=0.782715 diff=3.657227e-01
+  [0,5]: out=0.536133 ref=0.248657 diff=2.874756e-01
+  [0,6]: out=0.328613 ref=0.424561 diff=9.594727e-02
+  [1,0]: out=-0.299561 ref=-0.199097 diff=1.004639e-01
+  [1,1]: out=0.006618 ref=-0.268555 diff=2.751732e-01
+  [1,2]: out=-0.039978 ref=-0.689453 diff=6.494751e-01
+  Total errors: 56/56 (100.00%)
+  Max diff: 6.912842e-01 (threshold: 1.000000e-02)
+  Cosine similarity: 0.701999 (threshold: 0.9999)
+  KL divergence: 2.435089e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3824 342e 3672 36a2 36ac 384a 3542 
+  Reference row 0 hex: 2c89 349f 2e3a 3757 3a43 33f5 36cb 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: k=16 (two k-blocks) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=16 bias=no:
+[0m  [0,0]: out=-0.071184 ref=-0.161062 diff=8.987813e-02
+  [0,1]: out=-0.087850 ref=-0.202332 diff=1.144820e-01
+  [0,2]: out=-0.091425 ref=0.240708 diff=3.321330e-01
+  [0,3]: out=-0.234489 ref=-0.097442 diff=1.370467e-01
+  [0,4]: out=0.107094 ref=-0.150875 diff=2.579696e-01
+  [0,5]: out=0.300752 ref=0.017318 diff=2.834339e-01
+  [1,0]: out=0.550921 ref=0.473621 diff=7.729965e-02
+  [1,1]: out=0.498717 ref=0.533318 diff=3.460041e-02
+  [1,2]: out=-0.069786 ref=0.285841 diff=3.556274e-01
+  [1,3]: out=0.227156 ref=0.169526 diff=5.762962e-02
+  Total errors: 48/56 (85.71%)
+  Max diff: 1.324982e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.388575 (threshold: 0.9999)
+  KL divergence: 5.108431e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bd91c8cf bdb3eae3 bdbb3cef be701ddd 3ddb544a 3e99fc1c 3a5cb6f0 
+  Reference row 0 hex: be24ed6b be4f3039 3e767c35 bdc78fd0 be1a7f07 3c8dddbe 3a5cb6f0 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=16 bias=no:
+[0m  [0,0]: out=0.088379 ref=-0.179077 diff=2.674561e-01
+  [0,1]: out=-0.278076 ref=0.329590 diff=6.076660e-01
+  [0,2]: out=0.093262 ref=-0.129639 diff=2.229004e-01
+  [0,3]: out=0.242676 ref=0.123230 diff=1.194458e-01
+  [0,4]: out=0.163452 ref=-0.181274 diff=3.447266e-01
+  [0,5]: out=0.666504 ref=-0.299072 diff=9.655762e-01
+  [0,6]: out=0.102234 ref=0.686035 diff=5.838013e-01
+  [1,0]: out=0.392822 ref=0.429932 diff=3.710938e-02
+  [1,1]: out=-0.359619 ref=-0.413330 diff=5.371094e-02
+  [1,2]: out=0.411377 ref=0.288574 diff=1.228027e-01
+  Total errors: 56/56 (100.00%)
+  Max diff: 1.266602e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.302839 (threshold: 0.9999)
+  KL divergence: 1.531589e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 2da8 b473 2df8 33c4 313b 3955 2e8b 
+  Reference row 0 hex: b1bb 3546 b026 2fe3 b1cd b4c9 397d 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: k=31 (k with tail) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=31 bias=yes:
+[0m  [0,0]: out=-0.099709 ref=0.390018 diff=4.897265e-01
+  [0,1]: out=0.154126 ref=-0.196970 diff=3.510964e-01
+  [0,2]: out=0.318842 ref=0.225395 diff=9.344685e-02
+  [0,3]: out=1.336248 ref=0.280338 diff=1.055909e+00
+  [0,4]: out=-0.164005 ref=0.723551 diff=8.875560e-01
+  [0,5]: out=0.109058 ref=-0.025700 diff=1.347580e-01
+  [1,0]: out=-0.461270 ref=1.177539 diff=1.638809e+00
+  [1,1]: out=0.543672 ref=1.392298 diff=8.486267e-01
+  [1,2]: out=1.099621 ref=0.437837 diff=6.617844e-01
+  [1,3]: out=0.447140 ref=1.221582 diff=7.744421e-01
+  Total errors: 48/56 (85.71%)
+  Max diff: 1.638809e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.473499 (threshold: 0.9999)
+  KL divergence: 1.943620e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bdcc3407 3e1dd33d 3ea33f49 3fab0a2a be27f0fe 3ddf599d 3c69caf8 
+  Reference row 0 hex: 3ec7b06d be49b294 3e66ce0a 3e8f887e 3f393a9f bcd28980 3c69cb10 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=31 bias=yes:
+[0m  [0,0]: out=0.183838 ref=-0.126953 diff=3.107910e-01
+  [0,1]: out=0.426025 ref=0.346191 diff=7.983398e-02
+  [0,2]: out=-0.299316 ref=0.202881 diff=5.021973e-01
+  [0,3]: out=-0.522461 ref=0.356934 diff=8.793945e-01
+  [0,4]: out=0.118530 ref=-0.414062 diff=5.325928e-01
+  [0,5]: out=0.274658 ref=-0.080994 diff=3.556519e-01
+  [0,6]: out=0.387451 ref=0.590332 diff=2.028809e-01
+  [1,0]: out=-0.407959 ref=-0.587402 diff=1.794434e-01
+  [1,1]: out=-0.555664 ref=-0.944336 diff=3.886719e-01
+  [1,2]: out=-0.572266 ref=-0.810547 diff=2.382812e-01
+  Total errors: 56/56 (100.00%)
+  Max diff: 1.825195e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.355398 (threshold: 0.9999)
+  KL divergence: 2.129082e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 31e2 36d1 b4ca b82e 2f96 3465 3633 
+  Reference row 0 hex: b010 358a 327e 35b6 b6a0 ad2f 38b9 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: k=64 (large k) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=64 bias=no:
+[0m  [0,0]: out=0.951913 ref=0.771486 diff=1.804271e-01
+  [0,1]: out=0.963364 ref=-0.401310 diff=1.364674e+00
+  [0,2]: out=0.447412 ref=0.436401 diff=1.101112e-02
+  [0,3]: out=0.982272 ref=-0.490764 diff=1.473036e+00
+  [0,4]: out=0.891473 ref=0.326817 diff=5.646558e-01
+  [0,5]: out=0.096542 ref=-1.174306 diff=1.270849e+00
+  [1,0]: out=-0.064155 ref=0.003859 diff=6.801429e-02
+  [1,1]: out=-1.432990 ref=0.152902 diff=1.585892e+00
+  [1,2]: out=-0.847457 ref=0.734228 diff=1.581685e+00
+  [1,3]: out=0.312815 ref=0.948593 diff=6.357775e-01
+  Total errors: 48/56 (85.71%)
+  Max diff: 2.146513e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.317399 (threshold: 0.9999)
+  KL divergence: 4.037010e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3f73b08b 3f769eff 3ee51328 3f7b762c 3f643793 3dc5b804 bdb5b380 
+  Reference row 0 hex: 3f458013 becd7881 3edf6fe8 befb4566 3ea75495 bf964faa bdb5b380 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=64 bias=no:
+[0m  [0,0]: out=0.355469 ref=-0.426514 diff=7.819824e-01
+  [0,1]: out=0.521973 ref=-1.208984 diff=1.730957e+00
+  [0,2]: out=0.905762 ref=0.742188 diff=1.635742e-01
+  [0,3]: out=0.656250 ref=1.189453 diff=5.332031e-01
+  [0,4]: out=0.558594 ref=0.780273 diff=2.216797e-01
+  [0,5]: out=0.271484 ref=0.026581 diff=2.449036e-01
+  [0,6]: out=0.858887 ref=0.084717 diff=7.741699e-01
+  [1,0]: out=-0.794922 ref=-0.096130 diff=6.987915e-01
+  [1,1]: out=0.114075 ref=-0.061249 diff=1.753235e-01
+  [1,2]: out=-0.475098 ref=0.240112 diff=7.152100e-01
+  Total errors: 56/56 (100.00%)
+  Max diff: 2.950195e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.025142 (threshold: 0.9999)
+  KL divergence: 4.266989e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 35b0 382d 3b3f 3940 3878 3458 3adf 
+  Reference row 0 hex: b6d3 bcd6 39f0 3cc2 3a3e 26ce 2d6c 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: k=127 (large k with tail) ---
+[0m[31mERROR in FP32 GEMM m=8 n=7 k=127 bias=yes:
+[0m  [0,0]: out=-1.106349 ref=-1.703828 diff=5.974789e-01
+  [0,1]: out=2.226874 ref=1.343040 diff=8.838340e-01
+  [0,2]: out=0.669219 ref=-1.667325 diff=2.336544e+00
+  [0,3]: out=-0.773632 ref=0.792539 diff=1.566171e+00
+  [0,4]: out=0.245104 ref=0.759822 diff=5.147181e-01
+  [0,5]: out=-2.601184 ref=-0.196932 diff=2.404252e+00
+  [1,0]: out=-0.933195 ref=0.566267 diff=1.499462e+00
+  [1,1]: out=-0.346191 ref=1.214117 diff=1.560309e+00
+  [1,2]: out=0.499398 ref=-0.276859 diff=7.762568e-01
+  [1,3]: out=-1.266850 ref=-0.155119 diff=1.111731e+00
+  Total errors: 48/56 (85.71%)
+  Max diff: 2.912641e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.277512 (threshold: 0.9999)
+  KL divergence: 6.980094e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bf8d9cd6 400e851b 3f2b51ee bf460cc6 3e7afc6a c02679cd bf40d84e 
+  Reference row 0 hex: bfda1706 3fabe8bd bfd56ae9 3f4ae3d4 3f4283aa be49a89e bf40d84e 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=8 n=7 k=127 bias=yes:
+[0m  [0,0]: out=-0.509277 ref=-1.322266 diff=8.129883e-01
+  [0,1]: out=-1.268555 ref=-0.671387 diff=5.971680e-01
+  [0,2]: out=-1.936523 ref=0.710449 diff=2.646973e+00
+  [0,3]: out=0.101440 ref=1.505859 diff=1.404419e+00
+  [0,4]: out=-0.471924 ref=-0.644531 diff=1.726074e-01
+  [0,5]: out=-0.260254 ref=-0.896484 diff=6.362305e-01
+  [0,6]: out=0.186401 ref=1.246094 diff=1.059692e+00
+  [1,0]: out=-2.902344 ref=0.191650 diff=3.093994e+00
+  [1,1]: out=0.319824 ref=0.154297 diff=1.655273e-01
+  [1,2]: out=-0.925293 ref=2.326172 diff=3.251465e+00
+  Total errors: 55/56 (98.21%)
+  Max diff: 3.251465e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.005326 (threshold: 0.9999)
+  KL divergence: 7.309776e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: b813 bd13 bfbf 2e7e b78d b42a 31f7 
+  Reference row 0 hex: bd4a b95f 39af 3e06 b928 bb2c 3cfc 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Random tail tests ---
+[0m[33m
+--- Testing: Random m=3 k=32 n=12 ---
+[0m[31mERROR in FP32 GEMM m=3 n=12 k=32 bias=no:
+[0m  [0,8]: out=-0.065866 ref=0.146585 diff=2.124511e-01
+  [0,9]: out=-0.389148 ref=-0.291964 diff=9.718367e-02
+  [0,10]: out=0.484628 ref=-0.911512 diff=1.396140e+00
+  [0,11]: out=-0.067469 ref=0.060075 diff=1.275443e-01
+  [1,8]: out=-0.430198 ref=-0.864343 diff=4.341447e-01
+  [1,9]: out=-1.226063 ref=-0.045527 diff=1.180536e+00
+  [1,10]: out=0.596545 ref=-0.525054 diff=1.121599e+00
+  [1,11]: out=0.924663 ref=0.877438 diff=4.722488e-02
+  [2,8]: out=0.106230 ref=-0.137214 diff=2.434434e-01
+  [2,9]: out=-0.120572 ref=0.696536 diff=8.171078e-01
+  Total errors: 12/36 (33.33%)
+  Max diff: 1.396140e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.554039 (threshold: 0.9999)
+  KL divergence: 1.209892e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3f09fe50 bf02c387 3e959275 be6e30ac 3e3a378d be927458 3e7d63b5 be5c69c8 ...
+  Reference row 0 hex: 3f09fe50 bf02c386 3e959275 be6e30ac 3e3a378d be927457 3e7d63b5 be5c69c8 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=7 k=102 n=17 ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=9 k=74 n=18 ---
+[0m[31mERROR in FP32 GEMM m=9 n=18 k=74 bias=no:
+[0m  [0,16]: out=0.758704 ref=0.792809 diff=3.410584e-02
+  [0,17]: out=0.521487 ref=-0.208172 diff=7.296591e-01
+  [1,16]: out=0.895381 ref=-0.306580 diff=1.201961e+00
+  [1,17]: out=0.751505 ref=-0.071378 diff=8.228837e-01
+  [2,16]: out=0.252850 ref=0.375525 diff=1.226748e-01
+  [2,17]: out=-0.027298 ref=-0.367009 diff=3.397104e-01
+  [3,16]: out=-0.661764 ref=-0.829735 diff=1.679705e-01
+  [3,17]: out=-0.519660 ref=0.822568 diff=1.342229e+00
+  [4,16]: out=1.582919 ref=1.181267 diff=4.016526e-01
+  [4,17]: out=1.339311 ref=-0.860545 diff=2.199856e+00
+  Total errors: 18/162 (11.11%)
+  Max diff: 2.199856e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.911439 (threshold: 0.9999)
+  KL divergence: 2.803657e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bf1ce068 3f894bd1 3e378717 3fe419ae 3e89c8a6 3f0fc576 bf00417d 3ec37b12 ...
+  Reference row 0 hex: bf1ce066 3f894bd0 3e378713 3fe419ac 3e89c8a4 3f0fc574 bf00417d 3ec37b15 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=26 k=20 n=9 ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=8 k=27 n=10 ---
+[0m[31mERROR in FP32 GEMM m=8 n=10 k=27 bias=no:
+[0m  [0,8]: out=0.578185 ref=0.950325 diff=3.721392e-01
+  [0,9]: out=-0.196145 ref=0.507036 diff=7.031807e-01
+  [1,8]: out=0.255966 ref=0.426506 diff=1.705402e-01
+  [1,9]: out=0.398752 ref=-0.349266 diff=7.480178e-01
+  [2,8]: out=-0.377941 ref=-0.496332 diff=1.183911e-01
+  [2,9]: out=0.565730 ref=-0.281500 diff=8.472300e-01
+  [3,8]: out=-0.641120 ref=-0.173438 diff=4.676824e-01
+  [3,9]: out=0.293053 ref=-0.064722 diff=3.577755e-01
+  [4,8]: out=-0.048595 ref=0.256574 diff=3.051695e-01
+  [4,9]: out=-0.245670 ref=-0.220314 diff=2.535577e-02
+  Total errors: 16/80 (20.00%)
+  Max diff: 8.472300e-01 (threshold: 1.000000e-04)
+  Cosine similarity: 0.864580 (threshold: 0.9999)
+  KL divergence: 2.137702e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: 3e564ab7 bf0e352b bf18cf3b 3f2c146c 3d4be71f 3ec9dcc8 3e35c93e 3e9fffdd ...
+  Reference row 0 hex: 3e564ab7 bf0e352b bf18cf3c 3f2c146e 3d4be708 3ec9dcc8 3e35c93f 3e9fffdc ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=30 k=73 n=13 ---
+[0m[31mERROR in FP32 GEMM m=30 n=13 k=73 bias=no:
+[0m  [0,8]: out=0.167731 ref=-0.486950 diff=6.546807e-01
+  [0,9]: out=-0.933966 ref=0.614265 diff=1.548231e+00
+  [0,10]: out=0.184675 ref=0.219329 diff=3.465380e-02
+  [0,11]: out=-0.827118 ref=1.276602 diff=2.103720e+00
+  [1,8]: out=-0.132162 ref=0.177725 diff=3.098866e-01
+  [1,9]: out=0.079276 ref=0.501898 diff=4.226224e-01
+  [1,10]: out=-0.321669 ref=-0.512002 diff=1.903338e-01
+  [1,11]: out=-0.354040 ref=0.347638 diff=7.016780e-01
+  [2,8]: out=-0.322884 ref=0.362686 diff=6.855702e-01
+  [2,9]: out=-1.156144 ref=-0.340540 diff=8.156036e-01
+  Total errors: 120/390 (30.77%)
+  Max diff: 2.967198e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.691688 (threshold: 0.9999)
+  KL divergence: 1.540716e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: bf4c32e5 bec428aa 3f9d959e 3bd1c8b7 bf651f41 bf41ad06 bf1013e6 3f7b9d3b ...
+  Reference row 0 hex: bf4c32e4 bec428ac 3f9d959d 3bd1c93b bf651f41 bf41ad04 bf1013e4 3f7b9d3d ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=30 n=13 k=73 bias=no:
+[0m  [0,8]: out=0.670410 ref=-0.199829 diff=8.702393e-01
+  [0,9]: out=0.916992 ref=-0.368164 diff=1.285156e+00
+  [0,10]: out=-0.456543 ref=0.516113 diff=9.726562e-01
+  [0,11]: out=-0.932617 ref=0.011650 diff=9.442673e-01
+  [0,12]: out=0.377930 ref=0.773438 diff=3.955078e-01
+  [1,8]: out=0.454102 ref=-1.660156 diff=2.114258e+00
+  [1,9]: out=-1.027344 ref=-0.870117 diff=1.572266e-01
+  [1,10]: out=-0.236206 ref=-0.925781 diff=6.895752e-01
+  [1,11]: out=-0.448730 ref=0.881836 diff=1.330566e+00
+  [1,12]: out=1.036133 ref=0.325684 diff=7.104492e-01
+  Total errors: 149/390 (38.21%)
+  Max diff: 2.977539e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.497583 (threshold: 0.9999)
+  KL divergence: 1.133292e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3585 b481 3498 b6c4 b021 3c79 b9b5 b63f 395d 3b56 b74e bb76 360c 
+  Reference row 0 hex: 3585 b481 3497 b6c3 b026 3c77 b9b5 b63f b265 b5e4 3821 21f7 3a30 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: Random m=22 k=80 n=11 ---
+[0m[31mERROR in FP32 GEMM m=22 n=11 k=80 bias=no:
+[0m  [0,8]: out=0.435221 ref=0.106900 diff=3.283211e-01
+  [0,9]: out=0.383912 ref=0.144711 diff=2.392019e-01
+  [1,8]: out=0.552713 ref=0.265707 diff=2.870066e-01
+  [1,9]: out=1.099331 ref=-0.378642 diff=1.477973e+00
+  [2,8]: out=0.343253 ref=0.783807 diff=4.405533e-01
+  [2,9]: out=0.542082 ref=-0.634061 diff=1.176142e+00
+  [3,8]: out=1.956542 ref=0.318300 diff=1.638241e+00
+  [3,9]: out=0.539962 ref=-0.311696 diff=8.516579e-01
+  [4,8]: out=0.014425 ref=-0.337252 diff=3.516768e-01
+  [4,9]: out=0.643354 ref=-0.590854 diff=1.234208e+00
+  Total errors: 44/242 (18.18%)
+  Max diff: 2.798921e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.827873 (threshold: 0.9999)
+  KL divergence: 6.024894e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: be415c74 bf4b8f5c be28ca55 3d410e0a bf5a2867 bda8ca88 3ee55ae3 3ead135e ...
+  Reference row 0 hex: be415c76 bf4b8f5d be28ca56 3d410e0f bf5a2866 bda8ca7a 3ee55ae5 3ead135f ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=22 n=11 k=80 bias=no:
+[0m  [0,8]: out=0.173462 ref=0.482178 diff=3.087158e-01
+  [0,9]: out=0.196899 ref=0.300049 diff=1.031494e-01
+  [0,10]: out=-1.246094 ref=-0.352295 diff=8.937988e-01
+  [1,8]: out=-0.293213 ref=0.329834 diff=6.230469e-01
+  [1,9]: out=-0.873535 ref=0.406494 diff=1.280029e+00
+  [1,10]: out=1.072266 ref=-0.635254 diff=1.707520e+00
+  [2,8]: out=-0.727539 ref=0.090759 diff=8.182983e-01
+  [2,9]: out=0.170410 ref=-0.472168 diff=6.425781e-01
+  [2,10]: out=1.549805 ref=0.249023 diff=1.300781e+00
+  [3,8]: out=-0.217163 ref=0.013031 diff=2.301941e-01
+  Total errors: 65/242 (26.86%)
+  Max diff: 2.961914e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.676922 (threshold: 0.9999)
+  KL divergence: 1.428239e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3050 bc99 b75b ae10 b886 25e6 371b 34d9 318d 324d bcfc 
+  Reference row 0 hex: 3051 bc98 b75a ae14 b885 25f4 371b 34d8 37b7 34cd b5a3 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: Random m=9 k=52 n=14 ---
+[0m[31mERROR in FP32 GEMM m=9 n=14 k=52 bias=yes:
+[0m  [0,8]: out=-0.003625 ref=-0.450187 diff=4.465623e-01
+  [0,9]: out=-0.447400 ref=0.218574 diff=6.659734e-01
+  [0,10]: out=0.175149 ref=-1.366088 diff=1.541237e+00
+  [0,11]: out=-0.110534 ref=-0.552723 diff=4.421893e-01
+  [0,12]: out=0.233403 ref=0.117388 diff=1.160151e-01
+  [0,13]: out=0.003821 ref=-0.582428 diff=5.862485e-01
+  [1,8]: out=0.375815 ref=0.807320 diff=4.315046e-01
+  [1,9]: out=1.238735 ref=0.561141 diff=6.775944e-01
+  [1,10]: out=0.012306 ref=-0.189637 diff=2.019431e-01
+  [1,11]: out=0.230418 ref=0.422423 diff=1.920048e-01
+  Total errors: 54/126 (42.86%)
+  Max diff: 1.727495e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.726917 (threshold: 0.9999)
+  KL divergence: 2.235839e-02 (threshold: 1.000000e-04)
+  Output row 0 hex: bf8e005c 3eb11472 bf38a873 3f1d43ad bd85f7cb bf85fadc 3cb607b7 3c655251 ...
+  Reference row 0 hex: bf8e005c 3eb11475 bf38a876 3f1d43ae bd85f7bc bf85fadd 3cb607b0 3c655220 ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[31mERROR in FP16 GEMM m=9 n=14 k=52 bias=yes:
+[0m  [0,8]: out=0.027588 ref=0.010368 diff=1.721954e-02
+  [0,9]: out=-0.353271 ref=-0.772461 diff=4.191895e-01
+  [0,10]: out=-0.750488 ref=-0.239136 diff=5.113525e-01
+  [0,11]: out=-0.663086 ref=-0.416016 diff=2.470703e-01
+  [0,12]: out=-0.042145 ref=0.205322 diff=2.474670e-01
+  [0,13]: out=-0.098206 ref=-0.652344 diff=5.541382e-01
+  [1,8]: out=0.111023 ref=-0.273193 diff=3.842163e-01
+  [1,9]: out=-0.270752 ref=-0.537598 diff=2.668457e-01
+  [1,10]: out=0.937500 ref=-0.456299 diff=1.393799e+00
+  [1,11]: out=-1.087891 ref=0.302246 diff=1.390137e+00
+  Total errors: 53/126 (42.06%)
+  Max diff: 1.910645e+00 (threshold: 1.000000e-02)
+  Cosine similarity: 0.741829 (threshold: 0.9999)
+  KL divergence: 1.207298e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: ba4a b8e7 3d62 ae18 349c b482 ba91 b3e9 2710 b5a7 ba01 b94e a965 ae49 
+  Reference row 0 hex: ba48 b8e6 3d63 ae13 349a b484 ba91 b3ef 214f ba2e b3a7 b6a8 3292 b938 
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x16_fp16
+[33m
+--- Testing: Random m=32 k=17 n=1 ---
+[0m[32m  FP32: PASSED
+[0m[32m  FP16: PASSED
+[0m[33m
+--- Testing: Random m=9 k=76 n=20 ---
+[0m[31mERROR in FP32 GEMM m=9 n=20 k=76 bias=yes:
+[0m  [0,16]: out=0.151679 ref=0.220074 diff=6.839520e-02
+  [0,17]: out=-0.666366 ref=-0.927727 diff=2.613611e-01
+  [0,18]: out=-0.962181 ref=-0.398207 diff=5.639746e-01
+  [0,19]: out=1.952464 ref=1.476621 diff=4.758424e-01
+  [1,16]: out=1.726885 ref=1.494623 diff=2.322613e-01
+  [1,17]: out=0.737237 ref=-0.525001 diff=1.262239e+00
+  [1,18]: out=0.658225 ref=0.104149 diff=5.540761e-01
+  [1,19]: out=1.362862 ref=0.261056 diff=1.101805e+00
+  [2,16]: out=0.999544 ref=0.181802 diff=8.177422e-01
+  [2,17]: out=-0.063773 ref=0.760242 diff=8.240154e-01
+  Total errors: 36/180 (20.00%)
+  Max diff: 2.273247e+00 (threshold: 1.000000e-04)
+  Cosine similarity: 0.840326 (threshold: 0.9999)
+  KL divergence: 1.181025e-01 (threshold: 1.000000e-04)
+  Output row 0 hex: 3ea5e66c 3fc9cddc beeb41ed bf864039 be0462ec be07184b be07b287 bfc479eb ...
+  Reference row 0 hex: 3ea5e668 3fc9cddd beeb41e6 bf86403a be0462e7 be07184e be07b28c bfc479ee ...
+  Compiler flags: -march=rv64gcv0p7_zfh_xtheadc_xtheadvdot
+  Kernel: shl_rvv_gemm_8x8_fp32
+[32m  FP16: PASSED
+[0m
+================================================
+[31mFAILED: 1994 errors found[0m
+Total tests: 84
+GEMM tail handling needs fixes.

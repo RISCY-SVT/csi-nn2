@@ -436,15 +436,20 @@ void shl_rvv_reorder_kernel_packn_fp16(__fp16 *a, __fp16 *sa, int m, int k, int 
  * @brief Reorder input matrix B from row-major to Z8 block format for optimized GEMM
  * 
  * This function reorganizes a k×n matrix B into a blocked format where data is arranged
- * in blocks of 8 columns for efficient vector processing. The output format enables
- * sequential memory access patterns during GEMM computation.
+ * in blocks of 8 columns for efficient vector processing. Within each block, only the
+ * block_width elements from each row are stored contiguously.
+ * 
+ * CRITICAL: Each block contains exactly block_width elements per row, NOT the entire row.
+ * This ensures GEMM's "in_ptr += block_width" correctly advances to the next row.
  * 
  * Input layout (row-major):
  *   B[k][n] with stride ldx between rows
  * 
  * Output layout (Z8 blocked):
  *   - Full 8-column blocks: [n/8][k][8] - each block contains k rows of 8 elements
- *   - Tail columns (if any): [k][n%8] - remaining columns in row-major order
+ *   - 4-column blocks: [remaining_n/4][k][4] 
+ *   - 2-column blocks: [remaining_n/2][k][2]
+ *   - 1-column blocks: [remaining_n/1][k][1]
  * 
  * @param input_matrix    Source matrix B in row-major format [k × n]
  * @param reordered_output Destination buffer for reordered data
@@ -455,56 +460,108 @@ void shl_rvv_reorder_kernel_packn_fp16(__fp16 *a, __fp16 *sa, int m, int k, int 
 void shl_rvv_reorder_input_z8_fp32(float *input_matrix, float *reordered_output, 
                                    int num_rows, int num_cols, int row_stride)
 {
-    // Set vector length for processing 8 floats at once (LMUL=2)
-    int32_t vector_length = vsetvl_e32m2(8);
-    float *current_input_ptr = NULL;
     int col_idx = 0;
-    // printf("shl_rvv_reorder_input_z8_fp32 Reordering input matrix: %d rows, %d columns\n", num_rows, num_cols);
     
     /* -------- Process full blocks of 8 columns -------- */
-    // Each iteration processes a complete 8×k block
+    int vl = vsetvl_e32m2(8);
     for (; col_idx + 7 < num_cols; col_idx += 8) {
-        // Point to the start of current 8-column block
-        current_input_ptr = input_matrix + col_idx;
-        
-        // Process all rows for this 8-column block
         for (int row = 0; row < num_rows; row++) {
-            // Load 8 consecutive floats from current row
-            vfloat32m2_t vector_data = vle32_v_f32m2(current_input_ptr, vector_length);
+            // Load exactly 8 elements from this row
+            float *src_ptr = input_matrix + row * row_stride + col_idx;
+            vfloat32m2_t vector_data = vle32_v_f32m2(src_ptr, vl);
             
-            // Move to next row (advance by row stride)
-            current_input_ptr += row_stride;
-            
-            // Store 8 floats contiguously in output buffer
-            vse32_v_f32m2(reordered_output, vector_data, vector_length);
+            // Store 8 values contiguously in output buffer
+            vse32_v_f32m2(reordered_output, vector_data, vl);
             
             // Advance output pointer by 8 elements
             reordered_output += 8;
         }
     }
 
-    /* -------- Handle remaining columns (tail processing) -------- */
-    // Process any remaining columns that don't form a complete 8-column block
-    if (col_idx < num_cols) {
-        // Calculate number of remaining columns (1-7)
-        const int remaining_cols = num_cols - col_idx;
-        
-        // Adjust vector length for tail columns
-        vector_length = vsetvl_e32m2(remaining_cols);
-        
-        // Process each row for the tail columns
+    /* -------- Process 4-column blocks -------- */
+    vl = vsetvl_e32m1(4);
+    for (; col_idx + 3 < num_cols; col_idx += 4) {
         for (int row = 0; row < num_rows; row++) {
-            // Calculate starting position: base + row*stride + column offset
-            current_input_ptr = input_matrix + row * row_stride + col_idx;
+            // Load exactly 4 elements from this row
+            float *src_ptr = input_matrix + row * row_stride + col_idx;
+            vfloat32m1_t vector_data = vle32_v_f32m1(src_ptr, vl);
             
-            // Load only the remaining columns from current row
-            vfloat32m2_t vector_data = vle32_v_f32m2(current_input_ptr, vector_length);
+            // Store 4 values contiguously
+            vse32_v_f32m1(reordered_output, vector_data, vl);
             
-            // Store tail elements contiguously (row-major order maintained)
-            vse32_v_f32m2(reordered_output, vector_data, vector_length);
+            // Advance output pointer by 4 elements
+            reordered_output += 4;
+        }
+    }
+
+    /* -------- Process 2-column blocks -------- */
+    for (; col_idx + 1 < num_cols; col_idx += 2) {
+        for (int row = 0; row < num_rows; row++) {
+            // Copy exactly 2 elements from this row
+            float *src_ptr = input_matrix + row * row_stride + col_idx;
+            reordered_output[0] = src_ptr[0];
+            reordered_output[1] = src_ptr[1];
             
-            // Advance output by actual number of elements stored
-            reordered_output += remaining_cols;
+            // Advance output pointer by 2 elements
+            reordered_output += 2;
+        }
+    }
+
+    /* -------- Process single column tail -------- */
+    if (col_idx < num_cols) {
+        for (int row = 0; row < num_rows; row++) {
+            // Copy exactly 1 element from this row
+            reordered_output[0] = input_matrix[row * row_stride + col_idx];
+            
+            // Advance output pointer by 1 element
+            reordered_output += 1;
+        }
+    }
+}
+
+/**
+ * @brief Alternative fix using simpler scalar code (for debugging/verification)
+ * This version is easier to understand and verify correctness
+ */
+void shl_rvv_reorder_input_z8_fp32_simple_tail(float *input_matrix, float *reordered_output, 
+                                               int num_rows, int num_cols, int row_stride)
+{
+    int col_idx = 0;
+    
+    /* Process 8-column blocks */
+    for (; col_idx + 7 < num_cols; col_idx += 8) {
+        for (int row = 0; row < num_rows; row++) {
+            for (int c = 0; c < 8; c++) {
+                reordered_output[row * 8 + c] = input_matrix[row * row_stride + col_idx + c];
+            }
+        }
+        reordered_output += 8 * num_rows;
+    }
+
+    /* Process 4-column blocks */
+    for (; col_idx + 3 < num_cols; col_idx += 4) {
+        for (int row = 0; row < num_rows; row++) {
+            for (int c = 0; c < 4; c++) {
+                reordered_output[row * 4 + c] = input_matrix[row * row_stride + col_idx + c];
+            }
+        }
+        reordered_output += 4 * num_rows;
+    }
+
+    /* Process 2-column blocks */
+    for (; col_idx + 1 < num_cols; col_idx += 2) {
+        for (int row = 0; row < num_rows; row++) {
+            for (int c = 0; c < 2; c++) {
+                reordered_output[row * 2 + c] = input_matrix[row * row_stride + col_idx + c];
+            }
+        }
+        reordered_output += 2 * num_rows;
+    }
+
+    /* Process single column tail */
+    if (col_idx < num_cols) {
+        for (int row = 0; row < num_rows; row++) {
+            reordered_output[row] = input_matrix[row * row_stride + col_idx];
         }
     }
 }
@@ -513,16 +570,22 @@ void shl_rvv_reorder_input_z8_fp32(float *input_matrix, float *reordered_output,
  * @brief Reorder input matrix B from row-major to Z16/Z8 block format for optimized FP16 GEMM
  * 
  * This function reorganizes a k×n half-precision matrix B into a blocked format with
- * primary blocks of 16 columns and secondary blocks of 8 columns for efficient vector
- * processing on systems with larger vector registers.
+ * blocks of decreasing sizes (16, 8, 4, 2, 1) for efficient vector processing.
+ * 
+ * CRITICAL: Each block contains exactly block_width elements per row, NOT the entire row.
+ * This ensures GEMM's "in_ptr += block_width" correctly advances to the next row.
  * 
  * Input layout (row-major):
  *   B[k][n] with stride ldx between rows
  * 
- * Output layout (Z16/Z8 blocked):
+ * Output layout (Z16/Z8/Z4/Z2/Z1 blocked):
  *   - Full 16-column blocks: [n/16][k][16] - each block contains k rows of 16 elements
  *   - 8-column blocks: [remaining_n/8][k][8] - for columns not filling 16-block
- *   - Tail columns: [k][n%8] - remaining columns in row-major order
+ *   - 4-column blocks: [remaining_n/4][k][4]
+ *   - 2-column blocks: [remaining_n/2][k][2]
+ *   - 1-column blocks: [remaining_n/1][k][1]
+ * 
+ * Within each block, rows are stored contiguously with exactly block_width elements per row.
  * 
  * @param input_matrix     Source matrix B in row-major format [k × n]
  * @param reordered_output Destination buffer for reordered data
@@ -533,84 +596,81 @@ void shl_rvv_reorder_input_z8_fp32(float *input_matrix, float *reordered_output,
 void shl_rvv_reorder_input_z16_fp16(__fp16 *input_matrix, __fp16 *reordered_output,
                                     int num_rows, int num_cols, int row_stride)
 {
-    // Set initial vector length for processing 16 half-precision values (LMUL=2)
-    int vector_length = vsetvl_e16m2(16);
-    __fp16 *current_input_ptr = NULL;
     int col_idx = 0;
-    // printf("shl_rvv_reorder_input_z16_fp16 Reordering input matrix: %d rows, %d columns\n", num_rows, num_cols);
     
     /* -------- Process full blocks of 16 columns -------- */
-    // Primary blocking: process 16-column blocks for maximum vectorization
+    int vl = vsetvl_e16m2(16);
     for (; col_idx + 15 < num_cols; col_idx += 16) {
-        // Point to the start of current 16-column block
-        current_input_ptr = input_matrix + col_idx;
-        
-        // Process all rows for this 16-column block
         for (int row = 0; row < num_rows; row++) {
-            // Load 16 consecutive fp16 values from current row
-            vfloat16m2_t vector_data = vle16_v_f16m2(current_input_ptr, vector_length);
-            
-            // Move to next row (advance by row stride)
-            current_input_ptr += row_stride;
+            // Load exactly 16 elements from this row
+            __fp16 *src_ptr = input_matrix + row * row_stride + col_idx;
+            vfloat16m2_t vector_data = vle16_v_f16m2(src_ptr, vl);
             
             // Store 16 values contiguously in output buffer
-            vse16_v_f16m2(reordered_output, vector_data, vector_length);
+            vse16_v_f16m2(reordered_output, vector_data, vl);
             
             // Advance output pointer by 16 elements
             reordered_output += 16;
         }
     }
 
-    /* -------- Process remaining 8-column blocks -------- */
-    // Secondary blocking: handle columns that don't fill a 16-block with 8-blocks
+    /* -------- Process 8-column blocks -------- */
+    vl = vsetvl_e16m1(8);
     for (; col_idx + 7 < num_cols; col_idx += 8) {
-        // Switch to smaller vector length for 8 elements (LMUL=1)
-        vector_length = vsetvl_e16m1(8);
-        
-        // Point to the start of current 8-column block
-        current_input_ptr = input_matrix + col_idx;
-        
-        // Process all rows for this 8-column block
         for (int row = 0; row < num_rows; row++) {
-            // Load 8 consecutive fp16 values from current row
-            vfloat16m1_t vector_data = vle16_v_f16m1(current_input_ptr, vector_length);
+            // Load exactly 8 elements from this row
+            __fp16 *src_ptr = input_matrix + row * row_stride + col_idx;
+            vfloat16m1_t vector_data = vle16_v_f16m1(src_ptr, vl);
             
-            // Move to next row (advance by row stride)
-            current_input_ptr += row_stride;
-            
-            // Store 8 values contiguously in output buffer
-            vse16_v_f16m1(reordered_output, vector_data, vector_length);
+            // Store 8 values contiguously
+            vse16_v_f16m1(reordered_output, vector_data, vl);
             
             // Advance output pointer by 8 elements
             reordered_output += 8;
         }
     }
 
-    /* -------- Handle final tail columns (less than 8) -------- */
-    // Process any remaining columns that don't form a complete 8-column block
-    if (col_idx < num_cols) {
-        // Calculate number of remaining columns (1-7)
-        const int remaining_cols = num_cols - col_idx;
-        
-        // Adjust vector length for tail columns (back to LMUL=2 for flexibility)
-        vector_length = vsetvl_e16m2(remaining_cols);
-        
-        // Process each row for the tail columns
+    /* -------- Process 4-column blocks -------- */
+    vl = vsetvl_e16m1(4);
+    for (; col_idx + 3 < num_cols; col_idx += 4) {
         for (int row = 0; row < num_rows; row++) {
-            // Calculate starting position: base + row*stride + column offset
-            current_input_ptr = input_matrix + row * row_stride + col_idx;
+            // Load exactly 4 elements from this row
+            __fp16 *src_ptr = input_matrix + row * row_stride + col_idx;
+            vfloat16m1_t vector_data = vle16_v_f16m1(src_ptr, vl);
             
-            // Load only the remaining columns from current row
-            vfloat16m2_t vector_data = vle16_v_f16m2(current_input_ptr, vector_length);
+            // Store 4 values contiguously
+            vse16_v_f16m1(reordered_output, vector_data, vl);
             
-            // Store tail elements contiguously (row-major order maintained)
-            vse16_v_f16m2(reordered_output, vector_data, vector_length);
+            // Advance output pointer by 4 elements
+            reordered_output += 4;
+        }
+    }
+
+    /* -------- Process 2-column blocks -------- */
+    for (; col_idx + 1 < num_cols; col_idx += 2) {
+        for (int row = 0; row < num_rows; row++) {
+            // Copy exactly 2 elements from this row
+            __fp16 *src_ptr = input_matrix + row * row_stride + col_idx;
+            reordered_output[0] = src_ptr[0];
+            reordered_output[1] = src_ptr[1];
             
-            // Advance output by actual number of elements stored
-            reordered_output += remaining_cols;
+            // Advance output pointer by 2 elements
+            reordered_output += 2;
+        }
+    }
+
+    /* -------- Process single column tail -------- */
+    if (col_idx < num_cols) {
+        for (int row = 0; row < num_rows; row++) {
+            // Copy exactly 1 element from this row
+            reordered_output[0] = input_matrix[row * row_stride + col_idx];
+            
+            // Advance output pointer by 1 element
+            reordered_output += 1;
         }
     }
 }
+
 /**************************************************************
  * Data arrangement: Z8 Z4 | | |
  **************************************************************/
