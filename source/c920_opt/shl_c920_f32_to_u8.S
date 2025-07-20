@@ -34,7 +34,7 @@
     register definition:
         a0:         input addr
         a1:         output addr
-        a2:         zero_point
+        a2:         zero_point (offset)
         a3:         scale
         a4:         element length
         fa0:        1/scale
@@ -60,71 +60,84 @@
 
 
 SHL_C920_F32_TO_8:
-    csrr            t0, vlenb   // t0 = vlen/8
-    slli            t1, t0, 1
-    slli            t2, t0, 2
-    flw             fa0, (a3)
-    li              t3, 1
-    fcvt.s.w        ft0, t3
-    fdiv.s          fa0, ft0, fa0
+    csrr            t0, vlenb   // t0 = vlen/8 (vector register length in bytes)
+    slli            t1, t0, 1   // t1 = 2 * vlen/8 = vlen/4
+    slli            t2, t0, 2   // t2 = 4 * vlen/8 = vlen/2
+    flw             fa0, (a3)   // load scale value from memory
+    li              t3, 1       // load immediate 1
+    fcvt.s.w        ft0, t3     // convert int 1 to float 1.0f
+    fdiv.s          fa0, ft0, fa0  // fa0 = 1.0f / scale
     vsetvli         zero, zero, e32, m4
-    vfmv.v.f        v28, fa0
+    vfmv.v.f        v28, fa0    // broadcast 1/scale to vector register v28
 
 .L2:
-    bgt             t1, a4, .L1
+    bgt             t1, a4, .L1 // if remaining < vlen/4, go to tail processing
     vsetvli         zero, zero, e32, m4
-    vle.v           v0, (a0)
-    add             a0, a0, t2
-    vle.v           v4, (a0)
+    vle.v           v0, (a0)    // load first vlen/4 floats
+    add             a0, a0, t2  // advance input pointer by vlen/2 bytes
+    vle.v           v4, (a0)    // load second vlen/4 floats
     add             a0, a0, t2
 
-    sub             a4, a4, t1
-    bgt             t1, a4, .L2End
+    sub             a4, a4, t1  // decrement remaining count by vlen/4
+    bgt             t1, a4, .L2End // if next iteration would exceed, finish this one
 
 .L2Loop:
-    vfmul.vv        v8, v0, v28
+    // Scale and convert current data
+    vfmul.vv        v8, v0, v28    // multiply by 1/scale
     vfmul.vv        v12, v4, v28
-    vfcvt.x.f.v     v8, v8
+    vfcvt.x.f.v     v8, v8         // convert float to int32 (round to nearest)
     vfcvt.x.f.v     v12, v12
+    
+    // Prefetch next batch while processing current
     vle.v           v0, (a0)
     add             a0, a0, t2
     vle.v           v4, (a0)
     add             a0, a0, t2
-    vadd.vx         v8, v8, a2
+    
+    // Add offset/zero-point
+    vadd.vx         v8, v8, a2     // add offset to quantized values
     vadd.vx         v12, v12, a2
+    
 #ifndef SHL_C920_F32_TO_8_SIGNED
-    vmax.vx         v8, v8, zero
+    // For unsigned: clamp negative values to 0
+    vmax.vx         v8, v8, zero   // max(value, 0)
     vmax.vx         v12, v12, zero
+    // Narrow with unsigned saturation
     vsetvli         zero, zero, e16, m2
-    vnclipu.vi      v16, v8, 0
+    vnclipu.vi      v16, v8, 0     // narrow i32->u16 with unsigned saturation
     vnclipu.vi      v18, v12, 0
     vsetvli         zero, zero, e8, m1
-    vnclipu.vi      v20, v16, 0
+    vnclipu.vi      v20, v16, 0    // narrow u16->u8 with unsigned saturation
     vnclipu.vi      v21, v18, 0
 #else
+    // For signed: use signed saturation
     vsetvli         zero, zero, e16, m2
-    vnclip.vi       v16, v8, 0
+    vnclip.vi       v16, v8, 0     // narrow i32->i16 with signed saturation
     vnclip.vi       v18, v12, 0
     vsetvli         zero, zero, e8, m1
-    vnclip.vi       v20, v16, 0
+    vnclip.vi       v20, v16, 0    // narrow i16->i8 with signed saturation
     vnclip.vi       v21, v18, 0
 #endif
-    vse.v           v20, (a1)
-    add             a1, a1, t0
-    vse.v           v21, (a1)
+    
+    // Store results
+    vse.v           v20, (a1)      // store first vlen/8 bytes
+    add             a1, a1, t0     // advance output pointer
+    vse.v           v21, (a1)      // store second vlen/8 bytes
     add             a1, a1, t0
 
     vsetvli         zero, zero, e32, m4
     sub             a4, a4, t1
-    bgt             a4, t1, .L2Loop
+    bgt             a4, t1, .L2Loop // continue if remaining > vlen/4
 
 .L2End:
+    // Process last prefetched data without further prefetching
     vfmul.vv        v8, v0, v28
     vfmul.vv        v12, v4, v28
     vfcvt.x.f.v     v8, v8
     vfcvt.x.f.v     v12, v12
     vadd.vx         v8, v8, a2
     vadd.vx         v12, v12, a2
+    
 #ifndef SHL_C920_F32_TO_8_SIGNED
     vmax.vx         v8, v8, zero
     vmax.vx         v12, v12, zero
@@ -142,22 +155,27 @@ SHL_C920_F32_TO_8:
     vnclip.vi       v20, v16, 0
     vnclip.vi       v21, v18, 0
 #endif
+    
     vse.v           v20, (a1)
     add             a1, a1, t0
     vse.v           v21, (a1)
     add             a1, a1, t0
 
 .L1:
-    beqz            a4, .End
+    beqz            a4, .End     // exit if no remaining elements
 
 .L1Loop:
-    vsetvli         t0, a4, e32, m4
-    slli            t2, t0, 2
+    // Process remaining elements (< vlen/4)
+    vsetvli         t0, a4, e32, m4  // set vl = min(a4, vlmax)
+    slli            t2, t0, 2        // t2 = t0 * 4 (bytes for float input)
     vle.v           v0, (a0)
     add             a0, a0, t2
+    
+    // Scale, convert, and add offset
     vfmul.vv        v8, v0, v28
     vfcvt.x.f.v     v8, v8
     vadd.vx         v8, v8, a2
+    
 #ifndef SHL_C920_F32_TO_8_SIGNED
     vmax.vx         v8, v8, zero
     vsetvli         t0, a4, e16, m2
@@ -170,8 +188,9 @@ SHL_C920_F32_TO_8:
     vsetvli         t0, a4, e8, m1
     vnclip.vi       v20, v16, 0
 #endif
+    
     vse.v           v20, (a1)
-    add             a1, a1, t0
+    add             a1, a1, t0       // advance by actual elements processed
 
     sub             a4, a4, t0
     bgtz            a4, .L1Loop

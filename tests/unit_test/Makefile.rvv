@@ -45,6 +45,7 @@ test_objs += test_debug_gemm_n3.o
 test_objs += test_correct_gemm_logic.o
 test_objs += test_correct_reorder_gemm_pair.o
 test_objs += test_gemm_fp32_tail.o
+test_objs += test_c920_type_conversion.o
 
 utils_objs =
 
