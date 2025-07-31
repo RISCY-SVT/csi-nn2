@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-#include "c908/c908.h"
+#include "rvv/rvv.h"
 
 /*************************************************************
     note: VLEN = 128
