@@ -3,12 +3,6 @@ project(SHL)
 
 enable_language(ASM)
 
-set(TOOLS_PREFIX "riscv64-unknown-linux-gnu")
-# set(TOOLS_PREFIX "riscv64-unknown-linux-musl")
-set(CMAKE_C_COMPILER ${TOOLS_PREFIX}-gcc)
-set(CMAKE_CXX_COMPILER ${TOOLS_PREFIX}-g++)
-set(CMAKE_ASM_COMPILER ${TOOLS_PREFIX}-gcc)
-
 if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
   include(${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
 else()
@@ -30,6 +24,23 @@ file (STRINGS "version" SHL_VERSION)
 set(SHL_MAJOR_VERSION 2)
 SET(so_symlink_target ${CMAKE_INSTALL_PREFIX}/lib/libshl.so)
 SET(a_symlink_target ${CMAKE_INSTALL_PREFIX}/lib/libshl.a)
+
+# K1 (RVV 1.0) build
+if (CONFIG_BUILD_RISCV_K1)
+  include(cmake/rules.cmake)
+  set(SHL_LIB_TARGET "k1_lib")
+  set(SHL_LIB_NAME   shl_k1)
+
+  # Start conservatively: reference + generic + (later) RVV-1.0 kernels
+  list(APPEND SHL_BUILD_SRC_LST ${NN2_SRCS} ${REF_SRCS} ${GREF_SRCS})
+
+  # RVV 1.0 flags for SpacemiT K1 (no vendor xthead*)
+  set(SHL_BUILD_C_FLAGS -ffp-contract=off -march=rv64gcv_zvfh -mabi=lp64d -D__fp16=_Float16
+                        -DSHL_BUILD_K1 -DSHL_BUILD_REF -DSHL_BUILD_GREF)
+
+  include(cmake/target_build.cmake)
+  target_include_directories(${SHL_LIB_TARGET} PRIVATE module/dlpack/include/)
+endif()
 
 if(CONFIG_BUILD_X86_REF)
     # build x86_ref lib
@@ -90,7 +101,6 @@ if(CONFIG_BUILD_RISCV_C908)
     include(cmake/target_build.cmake)
 endif()
 
-# =========================================================================================
 if(CONFIG_BUILD_RISCV_C920)
     # build c920 lib
     set(CONFIG_GRAPH_REFERENCE_TVMGEN ON)
@@ -99,11 +109,10 @@ if(CONFIG_BUILD_RISCV_C920)
     set(SHL_LIB_TARGET "c920_lib")
     set(SHL_LIB_NAME shl_c920)
     LIST(APPEND SHL_BUILD_SRC_LST ${NN2_SRCS} ${REF_SRCS} ${GREF_SRCS} ${THEAD_RVV_SRCS} ${C920_SRCS} ${LLM_SRCS})
-    set(SHL_BUILD_C_FLAGS -ffp-contract=off -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c920 -DSHL_BUILD_C920 -DSHL_BUILD_REF -DSHL_BUILD_GREF -DSHL_BUILD_RVV -fopenmp)
+    set(SHL_BUILD_C_FLAGS -ffp-contract=off -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -DSHL_BUILD_C920 -DSHL_BUILD_REF -DSHL_BUILD_GREF -DSHL_BUILD_RVV -fopenmp)
     include(cmake/target_build.cmake)
     target_include_directories(${SHL_LIB_TARGET} PRIVATE module/dlpack/include/)
 endif()
-# =========================================================================================
 
 if(CONFIG_BUILD_RISCV_C920V2)
     # build c920v2 lib

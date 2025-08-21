@@ -31,6 +31,8 @@ x86_ref_build
 c920_build_so/
 x86_ref_build_so/
 c920v2_build/
+build*
+install*
 
 # config files
 script/kconfig/__pycache__/

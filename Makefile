@@ -1,8 +1,17 @@
 # Release or Debug or MinSizeRel
-BUILD_TYPE=MinSizeRel
+BUILD_TYPE=Release
 USE_CORE=8
-INSTALL_DIR=../install_nn2
-all: nn2_ref_x86
+INSTALL_DIR=../install_nn2/
+all: nn2_k1
+
+.PHONY: nn2_k1
+nn2_k1:
+	@rm -rf build_k1 && mkdir -p build_k1
+	@echo "set(CONFIG_BUILD_RISCV_K1 ON)" >  build_k1/config.cmake
+	@echo "set(CONFIG_BUILD_X86_REF OFF)" >> build_k1/config.cmake
+	@cd build_k1 && cmake ..
+	@$(MAKE) -C build_k1 -j
+
 
 nn2_e907_elf:
 	mkdir -p e907_build; cd e907_build; cmake ../ -DCONFIG_BUILD_RISCV_ELF_E907=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/e907/; make -j${USE_CORE}; make install; cd -
@@ -28,9 +37,6 @@ nn2_c908:
 nn2_c920:
 	mkdir -p c920_build; cd c920_build; cmake ../ -DCONFIG_BUILD_RISCV_C920=ON -DCONFIG_SHL_BUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/c920/; make -j${USE_CORE}; make install; cd -
 
-nn2_th1520:
-	mkdir -p th1520_build; cd th1520_build; cmake ../ -DCONFIG_BUILD_RISCV_RVM=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/rvm/; make -j${USE_CORE}; make install; cd -
-
 nn2_c920v2:
 	mkdir -p c920v2_build; cd c920v2_build; cmake ../ -DCONFIG_BUILD_RISCV_C920V2=ON -DCONFIG_SHL_BUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/c920v2/; make -j${USE_CORE}; make install; cd -
 
@@ -45,6 +51,10 @@ nn2_ref_x86_so:
 
 menuconfig:
 	env  KCONFIG_BASE=    python3  script/kconfig/menuconfig.py Kconfig
+
+.PHONY: install_nn2_k1
+install_nn2_k1:
+	@$(MAKE) -C build_k1 install
 
 .PHONY: install_nn2
 install_nn2: include
