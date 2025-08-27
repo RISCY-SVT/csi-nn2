@@ -1492,7 +1492,6 @@ void shl_rvv_reorder_input_z8_packn_int8_dot(int8_t *b, int8_t *sb, int k, int n
             tm1 += n * packn / 4;
         }
     }
-    */
 
     int avl = packn / 4;
     for (; t + 7 < n; t += 8) {
