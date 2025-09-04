@@ -57,7 +57,7 @@ file(GLOB_RECURSE THEAD_MATRIX_SRCS source/thead_matrix/*.c source/thead_matrix/
 # file(GLOB_RECURSE C906_SRCS source/c906_opt/*.c source/c906_opt/*.S)
 # file(GLOB_RECURSE C908_SRCS source/c908_opt/*.c source/c908_opt/*.S)
 file(GLOB_RECURSE C920_SRCS source/c920_opt/*.c source/c920_opt/*.S)
-# file(GLOB_RECURSE C920V2_SRCS source/c920v2_opt/*.c source/c920v2_opt/*.S)
+file(GLOB_RECURSE C920V2_SRCS source/c920v2_opt/*.c source/c920v2_opt/*.S)
 file(GLOB_RECURSE LLM_SRCS source/llm/*.c source/llm/*.cpp)
 
 include(source/reference/CMakeLists.txt)

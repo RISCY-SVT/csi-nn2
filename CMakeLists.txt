@@ -122,7 +122,7 @@ if(CONFIG_BUILD_RISCV_C920V2)
     set(SHL_LIB_TARGET "c920v2_lib")
     set(SHL_LIB_NAME shl_c920v2)
     LIST(APPEND SHL_BUILD_SRC_LST ${NN2_SRCS} ${REF_SRCS} ${GREF_SRCS} ${THEAD_RVV_SRCS} ${C920V2_SRCS})
-    set(SHL_BUILD_C_FLAGS -ffp-contract=off -march=rv64gcv_zfh_xtheadc_xtheadvdot -mabi=lp64d -DSHL_BUILD_C920V2 -DSHL_BUILD_REF -DSHL_BUILD_GREF -DSHL_BUILD_RVV)
+    set(SHL_BUILD_C_FLAGS -ffp-contract=off -march=rv64gcv_zvfh -mabi=lp64d -DSHL_BUILD_C920V2 -DSHL_BUILD_REF -DSHL_BUILD_GREF -DSHL_BUILD_RVV)
     include(cmake/target_build.cmake)
     target_include_directories(${SHL_LIB_TARGET} PRIVATE module/dlpack/include/)
 endif()
@@ -167,4 +167,25 @@ if(ENABLE_GCOV)
 endif()
 
 
-install(DIRECTORY "include/." DESTINATION "include" FILES_MATCHING PATTERN "*.h")
+# install(DIRECTORY "include/." DESTINATION "include" FILES_MATCHING PATTERN "*.h")
+
+# Условная установка заголовков для разных целевых платформ
+if(CONFIG_BUILD_RISCV_C920V2)
+    install(DIRECTORY "include/." DESTINATION "include" 
+            FILES_MATCHING PATTERN "*.h"
+            PATTERN "shl_c920.h" EXCLUDE
+            PATTERN "backend/c920/*" EXCLUDE)
+    # Удаляем пустую папку backend/c920 после установки
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory 
+            ${CMAKE_INSTALL_PREFIX}/include/backend/c920)")
+elseif(CONFIG_BUILD_RISCV_C920)
+    install(DIRECTORY "include/." DESTINATION "include" 
+            FILES_MATCHING PATTERN "*.h"
+            PATTERN "shl_c920v2.h" EXCLUDE
+            PATTERN "backend/c920v2/*" EXCLUDE)
+    # Удаляем пустую папку backend/c920v2 после установки
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory 
+            ${CMAKE_INSTALL_PREFIX}/include/backend/c920v2)")
+else()
+    install(DIRECTORY "include/." DESTINATION "include" FILES_MATCHING PATTERN "*.h")
+endif()

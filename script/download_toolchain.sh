@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ROOT_PATH=$PWD
-GCC_LINK="https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1749714096626/Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V3.1.0-20250522.tar.gz"
+GCC_LINK="https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1755679709552/Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V3.2.0-20250627.tar.gz"
 TAR_FILE=$ROOT_PATH/tools/Xuantie-900-gcc-linux-toolchain.tar.gz
 
 # create dir

@@ -1295,7 +1295,7 @@ void shl_export_model_print(struct csinn_session *sess)
     // restore debug level
     shl_debug_set_level(sess->debug_level);
 }
-#endif
+#endif  // SHL_EXPORT_MODEL
 
 /**
  * @addtogroup SESSION

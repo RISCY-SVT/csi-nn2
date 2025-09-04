@@ -40,3 +40,6 @@ script/kconfig/__pycache__/
 .config.old
 config.cmake
 mconf_config.h
+
+#log files
+*.log
